@@ -1,0 +1,52 @@
+# search format:
+#   +glob   include files matching glob in the list
+#   -glob   exclude files matching glob from the list
+
+# notice format:
+#   ${YEAR}     the current year
+#   ${FILE}     the name of the current file
+#   ${PROJECT}  the name and description of the current project
+#   ${PROJNAME} the name of the current project
+
+# WARNING: DO NOT TOUCH the notice contents.  Changing them may break files.
+
+---
+format: #The keys are full glob expressions
+  "*.sh":
+    start: "#%s"
+    end: "#%s"
+    border: "#"
+    line: "# %s"
+  "*.{js,ts,css,scss}":
+    start: "/*%s"
+    end: " %s*/"
+    border: "*"
+    line: " * %s"
+
+projects:
+  - name: ng-pane-manager2
+    desc: a fork of ng-pane-manager for Angular
+    search:
+      - "+projects/ng-pane-manager2/**/*"
+
+licenses:
+  - name: GPL v3
+    search:
+      - "+projects/ng-pane-manager2/src/**/*"
+      - "+projects/ng-pane-manager2/*.{js,sh}"
+    notice: |
+      ${PROJECT} (${FILE})
+      Copyright (C) 2019 Opus Logica
+
+      ${PROJNAME} is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      ${PROJNAME} is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with ${PROJNAME}.  If not, see <https://www.gnu.org/licenses/>.

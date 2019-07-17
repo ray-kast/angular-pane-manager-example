@@ -1,0 +1,246 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+require "yaml"
+
+def lcs(a, b)
+  prev = curr = nil
+  startA = stopA = startB = stopB = -1
+
+  prevB = 0
+  b.each do |wb, posB|
+    prevA = 0
+    curr = []
+
+    a.each_with_index do |(wa, posA), i|
+      orthoMax = [curr[-1] || 0, prev && prev[i] || 0].max
+
+      curr << if wa == wb
+        (prev && i != 0 && prev[i - 1] + 1 || 1).tap do |l|
+          if l > orthoMax
+            startA = prevA if startA < 0 || prevA < startA
+            startB = prevB if startB < 0
+            stopA = posA if posA > stopA
+            stopB = posB
+          end
+        end
+      else
+        orthoMax
+      end
+
+      prevA = posA
+    end
+
+    prev = curr
+    prevB = posB
+  end
+
+  [curr && curr[-1] || 0, Range.new(startA, stopA, false), Range.new(startB, stopB, false)]
+end
+
+def search_files(search)
+  search = search
+    .group_by{|p| p[0] }
+    .map{|k, v| [k, v.map{|s| s[1..-1] }] }
+    .to_h
+
+  exclude = search.fetch("-", [])
+
+  search
+    .fetch("+")
+    .flat_map{|p| Dir[p] }
+    .select{|f| File.file?(f) }
+    .reject{|f| exclude.any?{|e| File.fnmatch?(f, e) } }
+    .each{|f| yield f }
+end
+
+config = YAML.load(File.open(File.join(File.dirname($0), "license.yaml")))
+
+formats = config.fetch("format", {}).map{|k, v| [k, v] }
+projects = config.fetch("projects", [])
+licenses = config.fetch("licenses", [])
+
+project_map = {}
+
+projects.each do |project|
+  project["header"] = "#{project["name"]} - #{project["desc"]}"
+
+  search_files(project.fetch("search", [])) do |file|
+    raise "Conflicting projects matched #{file.inspect} (#{project_map[file]["name"]} and #{project["name"]})" if project_map[file] && project_map[file] != project
+
+    project_map[file] = project
+  end
+end
+
+plan = {}
+
+licenses.each do |license|
+  notice = license
+    .fetch("notice") { raise "Notice not found in config for license #{license["name"].inspect}" }
+    .split(/\n/)
+    .map{|l| l.rstrip }
+
+  notice.shift while notice[0].empty?
+  notice.pop while notice[-1].empty?
+
+  notice.unshift("")
+  notice.push("")
+
+  notice.each{|l| l.gsub!(/\$\{\s*YEAR\s*\}/i, Time.now.year.to_s) }
+
+  license["notice"] = notice
+
+  search_files(license.fetch("search", [])) do |file|
+    raise "Conflicting licenses matched #{file.inspect} (#{plan[file]["name"]} and #{license["name"]})" if plan[file] && plan[file] != license
+
+    matches = formats.select{|g, _| File.fnmatch(g, file, File::FNM_EXTGLOB) }
+
+    raise "Couldn't determine header format for #{file}" if matches.empty?
+    raise "Multiple header formats found for #{file} (#{matches.map{|g, _| g.inspect }.join(", ")})" if matches.length > 1
+
+    _, format = matches[0]
+
+    plan[file] = [license, format]
+  end
+end
+
+n_files = plan.count
+
+puts "INFO: Checking #{n_files} file(s)..."
+
+ret = 0
+
+begin
+  plan.each_with_index do |(file, (license, format)), index|
+    license_name = license["name"]
+    notice = license["notice"]
+    project = project_map[file]
+
+    if $stderr.tty?
+      $stderr << "\r\e[2K[#{index + 1}/#{n_files}] #{file} (#{license_name})"
+      do_erase = true
+    end
+
+    print = lambda do |*args|
+      if do_erase
+        $stderr << "\r\e[2K"
+        do_erase = false
+      end
+
+      puts(*args)
+    end
+
+    # Prepare the file header
+
+    str = ""
+    body = ""
+    width = 0
+
+    # TODO: something appears to be wrong with the width calculation
+
+    notice.each do |line|
+      line = line.gsub(/\$\{\s*(\S+)\s*\}/i) do |match|
+        case $1
+        when "PROJECT"; project["header"]
+        when "PROJNAME"; project["name"]
+        when "FILE"; File.basename(file)
+        end
+      end
+
+      curr = format["line"] % [line]
+      curr.rstrip!
+
+      body << curr << "\n"
+
+      width = [curr.strip.length, width].max
+    end
+
+    do_border = lambda do |fmt|
+      str << fmt % [format["border"] * [0, ((width - (fmt % [""]).length) / format["border"].length)].max] << "\n"
+    end
+
+    do_border.(format["start"])
+    str << body
+    do_border.(format["end"])
+    str << "\n"
+
+    # Compute an LCS
+
+    a = Enumerator.new do |y|
+      pos = 0
+      str.split(/(\s+)/).each_with_index do |word, idx|
+        pos += word.length
+        y << [word, pos] if idx % 2 == 0
+      end
+    end
+
+    b = Enumerator.new do |y|
+      pos = 0
+      File.foreach(file) do |line|
+        line.split(/(\s+)/).each_with_index do |word, idx|
+          pos += word.length
+          y << [word, pos] if idx % 2 == 0
+        end
+      end
+    end
+
+    lcs_len, lcs_a, lcs_b = lcs(a, b)
+
+    # Determine how to handle the file
+
+    overwrite = lambda do |&block|
+      file2 = "#{file}~"
+
+      file2 << "~" while File.exist?(file2)
+
+      begin
+        File.open(file2, "w", &block)
+
+        FileUtils.mv(file2, file)
+      rescue Exception => e
+        File.delete(file2)
+
+        raise e
+      end
+    end
+
+    lcs_frac = lcs_len / a.count.to_f
+    len_diff = (lcs_a.size - lcs_b.size).abs / [lcs_a.size, lcs_b.size].max.to_f
+
+    if lcs_frac <= 0.35
+      overwrite.() do |f|
+        f << str
+        File.open(file, "r") {|g| IO.copy_stream(g, f) }
+      end
+
+      print.("INFO: added #{license_name} notice to #{file.inspect}#{" (#{(lcs_frac * 100).round(2)}% match)" if lcs_a.size != 0 || lcs_b.size != 0}")
+
+      ret = 1 if ret == 0
+    elsif lcs_len != a.count
+      if len_diff <= 0.65
+        print.("INFO: file #{file.inspect} appears to have a slightly-altered header (#{(len_diff * 100).round(2)}% difference); replacing")
+
+        overwrite.() do |f|
+          File.open(file, "r") do |g|
+            IO.copy_stream(g, f, lcs_b.begin)
+            f << str
+            g.seek(lcs_b.end + 2)
+            IO.copy_stream(g, f)
+          end
+        end
+
+        ret = 1 if ret == 0
+      else
+        print.("ERROR: file #{file.inspect} appears to have an altered license header (#{(len_diff * 100).round(2)}% difference)")
+
+        ret = 2
+      end
+    end
+  end
+ensure
+  $stderr << "\n" if $stderr.tty?
+end
+
+puts "INFO: Done."
+
+exit(ret)
