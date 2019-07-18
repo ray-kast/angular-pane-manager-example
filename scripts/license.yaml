@@ -25,7 +25,7 @@ format: #The keys are full glob expressions
 
 projects:
   - name: ng-pane-manager2
-    desc: a fork of ng-pane-manager for Angular
+    desc: a port of ng-pane-manager to Angular 2+
     search:
       - "+projects/ng-pane-manager2/**/*"
 
