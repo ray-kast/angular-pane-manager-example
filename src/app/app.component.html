@@ -1,4 +1,5 @@
-<ng-pane-manager #man></ng-pane-manager>
+<ng-pane-manager id="man" #man [layout]="paneLayout"></ng-pane-manager>
 
-<div *ngPanel="'test1' for man">This is a test.</div>
-<div *ngPanel="'test2' for man">This is another test.</div>
+<div *ngPanel="'test1' for man" class="pane-content" style="background: #a33">This is a test.</div>
+<div *ngPanel="'test2' for man" class="pane-content" style="background: #3a3">This is another test.</div>
+<div *ngPanel="'test3' for man" class="pane-content" style="background: #33a">This is yet a third test.</div>
