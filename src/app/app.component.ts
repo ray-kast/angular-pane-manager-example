@@ -8,22 +8,40 @@ import {loadLayout, PaneLayout, saveLayout} from 'projects/ng-pane-manager2/src/
 })
 export class AppComponent implements OnInit {
     paneLayout: PaneLayout = loadLayout({
-        split: 'horiz',
-        ratio: [1.0 / 3.0, 1.0 / 3.0],
+        split: 'vert',
+        ratio: [1, 4],
         children:
             [
-                {id: 'left', template: 'test1'},
+                {gravity: 'top', id: 'top', template: 'top'},
                 {
-                    split: 'vert',
-                    ratio: 0.5,
+                    split: 'horiz',
+                    ratio: [1, 3, 1],
                     children:
                         [
-                            {id: 'midTop', template: 'test2'},
-                            {id: 'midBottom', template: 'test3'},
+                            {gravity: 'left', id: 'left', template: 'sideLeft'},
+                            {
+                                gravity: 'center',
+                                split: 'vert',
+                                ratio: [2, 1],
+                                children:
+                                    [
+                                        {id: 'main', template: 'main'},
+                                        {
+                                            gravity: 'bottom',
+                                            split: 'tab',
+                                            currentTab: 0,
+                                            children:
+                                                [
+                                                    {id: 'bottom1', template: 'bottom1'},
+                                                    {id: 'bottom2', template: 'bottom2'}
+                                                ]
+                                        },
+                                    ],
+                            },
+                            {gravity: 'right', id: 'right', template: 'sideRight'},
                         ],
-                },
-                {id: 'right', template: 'test2'},
-            ],
+                }
+            ]
     });
 
     ngOnInit() { console.log(saveLayout(this.paneLayout)); }

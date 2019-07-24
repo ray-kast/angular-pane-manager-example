@@ -1,5 +1,8 @@
 <ng-pane-manager id="man" #man [layout]="paneLayout"></ng-pane-manager>
 
-<div *ngPanel="'test1' for man" class="pane-content" style="background: #a33">This is a test.</div>
-<div *ngPanel="'test2' for man" class="pane-content" style="background: #3a3">This is another test.</div>
-<div *ngPanel="'test3' for man" class="pane-content" style="background: #33a">This is yet a third test.</div>
+<div *ngPanel="'main' for man" class="pane-content" style="background: #18a">Main content</div>
+<div *ngPanel="'sideLeft' for man" class="pane-content" style="background: #765">Left sidebar</div>
+<div *ngPanel="'sideRight' for man" class="pane-content" style="background: #567">Right sidebar</div>
+<div *ngPanel="'top' for man" class="pane-content" style="background: #3a3">Toolbar</div>
+<div *ngPanel="'bottom1' for man" class="pane-content" style="background: #a43">Bottom tab 1</div>
+<div *ngPanel="'bottom2' for man" class="pane-content" style="background: #a36">Bottom tab 2</div>
