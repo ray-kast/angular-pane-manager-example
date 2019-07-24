@@ -1,3 +1,3 @@
 [submodule "projects/ng-pane-manager2"]
 	path = projects/ng-pane-manager2
-	url = /dev/null
+	url = git@github.com:openopus/ng-pane-manager2.git
