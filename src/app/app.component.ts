@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {loadLayout, PaneLayout, saveLayout} from 'projects/ng-pane-manager2/src/public-api';
 
 @Component({
@@ -33,16 +33,46 @@ export class AppComponent implements OnInit {
                                             children:
                                                 [
                                                     {id: 'bottom1', template: 'bottom1'},
-                                                    {id: 'bottom2', template: 'bottom2'}
-                                                ]
+                                                    {id: 'bottom2', template: 'bottom2'},
+                                                    {
+                                                        split: 'horiz',
+                                                        ratio: [1, 1],
+                                                        children:
+                                                            [
+                                                                {
+                                                                    id: 'bottom3l',
+                                                                    template: 'bottom3'
+                                                                },
+                                                                {
+                                                                    id: 'bottom3r',
+                                                                    template: 'bottom1'
+                                                                },
+                                                            ],
+                                                    },
+                                                ],
                                         },
                                     ],
                             },
                             {gravity: 'right', id: 'right', template: 'sideRight'},
                         ],
-                }
-            ]
+                },
+            ],
     });
 
-    ngOnInit() { console.log(saveLayout(this.paneLayout)); }
+    ngOnInit() {
+        console.log(saveLayout(this.paneLayout));
+        console.log(saveLayout(
+            loadLayout({
+                split: 'horiz',
+                ratio: [1, 1],
+                children: [
+                    {id: 'fucc', template: 'fucc'},
+                    {
+                        split: 'horiz',
+                        ratio: [2, 3],
+                        children: [{id: 'fucc2', template: 'fucc'}, {id: 'fucc3', template: 'fucc'}]
+                    },
+                ],
+            }).simplifyDeep()));
+    }
 }
