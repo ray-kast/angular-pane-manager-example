@@ -1,6 +1,7 @@
 <ng-pane-manager id="man" #man [layout]="paneLayout"></ng-pane-manager>
 
-<div *ngPanel="'main' for man" class="pane-content" style="background: #18a">Main content</div>
+<div *ngPanel="'main1' for man" class="pane-content" style="background: #18a">Main content</div>
+<div *ngPanel="'main2' for man" class="pane-content" style="background: #17b">More content</div>
 <div *ngPanel="'sideLeft' for man" class="pane-content" style="background: #765">Left sidebar</div>
 <div *ngPanel="'sideRight' for man" class="pane-content" style="background: #567">Right sidebar</div>
 <div *ngPanel="'top' for man" class="pane-content" style="background: #3a3">Toolbar</div>
