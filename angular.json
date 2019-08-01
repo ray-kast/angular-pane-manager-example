@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng-pane-manager2-example": {
+    "angular-pane-manager-example": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ng-pane-manager2-example",
+            "outputPath": "dist/angular-pane-manager-example",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -62,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng-pane-manager2-example:build"
+            "browserTarget": "angular-pane-manager-example:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ng-pane-manager2-example:build:production"
+              "browserTarget": "angular-pane-manager-example:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng-pane-manager2-example:build"
+            "browserTarget": "angular-pane-manager-example:build"
           }
         },
         "test": {
@@ -110,43 +110,43 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ng-pane-manager2-example:serve"
+            "devServerTarget": "angular-pane-manager-example:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ng-pane-manager2-example:serve:production"
+              "devServerTarget": "angular-pane-manager-example:serve:production"
             }
           }
         }
       }
     },
-    "ng-pane-manager2": {
+    "angular-pane-manager": {
       "projectType": "library",
-      "root": "projects/ng-pane-manager2",
-      "sourceRoot": "projects/ng-pane-manager2/src",
+      "root": "projects/angular-pane-manager",
+      "sourceRoot": "projects/angular-pane-manager/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/ng-pane-manager2/tsconfig.lib.json",
-            "project": "projects/ng-pane-manager2/ng-package.json"
+            "tsConfig": "projects/angular-pane-manager/tsconfig.lib.json",
+            "project": "projects/angular-pane-manager/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ng-pane-manager2/src/test.ts",
-            "tsConfig": "projects/ng-pane-manager2/tsconfig.spec.json",
-            "karmaConfig": "projects/ng-pane-manager2/karma.conf.js"
+            "main": "projects/angular-pane-manager/src/test.ts",
+            "tsConfig": "projects/angular-pane-manager/tsconfig.spec.json",
+            "karmaConfig": "projects/angular-pane-manager/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ng-pane-manager2/tsconfig.lib.json",
-              "projects/ng-pane-manager2/tsconfig.spec.json"
+              "projects/angular-pane-manager/tsconfig.lib.json",
+              "projects/angular-pane-manager/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -155,5 +155,5 @@
         }
       }
     }},
-  "defaultProject": "ng-pane-manager2-example"
+  "defaultProject": "angular-pane-manager-example"
 }

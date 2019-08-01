@@ -24,16 +24,16 @@ format: #The keys are full glob expressions
     line: " * %s"
 
 projects:
-  - name: ng-pane-manager2
+  - name: angular-pane-manager
     desc: a port of ng-pane-manager to Angular 2+
     search:
-      - "+projects/ng-pane-manager2/**/*"
+      - "+projects/angular-pane-manager/**/*"
 
 licenses:
   - name: GPL v3
     search:
-      - "+projects/ng-pane-manager2/src/**/*"
-      - "+projects/ng-pane-manager2/*.{js,sh}"
+      - "+projects/angular-pane-manager/src/**/*"
+      - "+projects/angular-pane-manager/*.{js,sh}"
     notice: |
       ${PROJECT} (${FILE})
       Copyright (C) 2019 Opus Logica

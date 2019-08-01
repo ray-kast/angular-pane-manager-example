@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {loadLayout, PaneLayout, saveLayout} from 'projects/ng-pane-manager2/src/public-api';
+import {loadLayout, PaneLayout, saveLayout} from 'projects/angular-pane-manager/src/public-api';
 
 @Component({
     selector: 'app-root',

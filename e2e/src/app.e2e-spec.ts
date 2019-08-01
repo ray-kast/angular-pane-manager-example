@@ -9,7 +9,7 @@ describe('workspace-project App', () => {
 
     it('should display welcome message', () => {
         page.navigateTo();
-        expect(page.getTitleText()).toEqual('Welcome to ng-pane-manager2-example!');
+        expect(page.getTitleText()).toEqual('Welcome to angular-pane-manager-example!');
     });
 
     afterEach(async () => {

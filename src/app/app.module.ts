@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {NgPaneManagerModule} from 'projects/ng-pane-manager2/src/public-api';
+import {AngularPaneManagerModule} from 'projects/angular-pane-manager/src/public-api';
 
 import {AppComponent} from './app.component';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, NgPaneManagerModule],
+    imports: [BrowserModule, AngularPaneManagerModule],
     providers: [],
     bootstrap: [AppComponent]
 })

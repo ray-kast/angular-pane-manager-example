@@ -19,11 +19,11 @@
       "dom"
     ],
     "paths": {
-      "ng-pane-manager2": [
-        "dist/ng-pane-manager2"
+      "angular-pane-manager": [
+        "dist/angular-pane-manager"
       ],
-      "ng-pane-manager2/*": [
-        "dist/ng-pane-manager2/*"
+      "angular-pane-manager/*": [
+        "dist/angular-pane-manager/*"
       ]
     }
   },
