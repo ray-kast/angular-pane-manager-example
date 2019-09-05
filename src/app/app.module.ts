@@ -8,7 +8,7 @@ import {AppComponent} from './app.component';
     declarations: [AppComponent],
     imports: [BrowserModule, AngularPaneManagerModule],
     providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {
 }

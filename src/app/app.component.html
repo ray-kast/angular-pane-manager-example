@@ -1,10 +1,35 @@
 <ng-pane-manager id="man" #man [layout]="paneLayout"></ng-pane-manager>
 
-<div *ngPanel="'main1' for man" class="pane-content" style="background: #18a">Main content</div>
-<div *ngPanel="'main2' for man" class="pane-content" style="background: #17b">More content</div>
-<div *ngPanel="'sideLeft' for man" class="pane-content" style="background: #765">Left sidebar</div>
-<div *ngPanel="'sideRight' for man" class="pane-content" style="background: #567">Right sidebar</div>
-<div *ngPanel="'top' for man" class="pane-content" style="background: #3a3">Toolbar</div>
-<div *ngPanel="'bottom1' for man" class="pane-content" style="background: #a43">Bottom tab 1</div>
-<div *ngPanel="'bottom2' for man" class="pane-content" style="background: #a36">Bottom tab 2</div>
-<div *ngPanel="'bottom3' for man" class="pane-content" style="background: #b22">Bottom tab 3</div>
+<div *ngPane="let panel named 'main1' for man" class="pane-content" style="background: #18a">
+    My title is {{panel.title}}!
+    <br>
+    Main content
+</div>
+
+<div *ngPane="let panel named 'main2' for man" class="pane-content" style="background: #17b">
+    More content
+</div>
+
+<div *ngPane="let panel named 'sideLeft' for man" class="pane-content" style="background: #765">
+    Left sidebar
+</div>
+
+<div *ngPane="let panel named 'sideRight' for man" class="pane-content" style="background: #567">
+    Right sidebar
+</div>
+
+<div *ngPane="let panel named 'top' for man" class="pane-content" style="background: #3a3">
+    Toolbar
+</div>
+
+<div *ngPane="let panel named 'bottom1' for man" class="pane-content" style="background: #a43">
+    Bottom tab 1
+</div>
+
+<div *ngPane="let panel named 'bottom2' for man" class="pane-content" style="background: #a36">
+    Bottom tab 2
+</div>
+
+<div *ngPane="let panel named 'bottom3' for man" class="pane-content" style="background: #b22">
+    Bottom tab 3
+</div>
