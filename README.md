@@ -1,5 +1,9 @@
 # angular-pane-manager-example
 
+This project shows off a simple example usage of [`angular-pane-manager`] and provides the Angular project scaffolding to build and publish the library.
+
+`app.component.html` and `app.component.ts` show off some basics of the library, such as pane creation and layout save/restore.  `app.component.scss` contains a minimal stylesheet for the pane manager components.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
 
 ## Development server
