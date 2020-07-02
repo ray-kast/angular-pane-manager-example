@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
 :root {
   font-size: 16px;
 }
@@ -10,8 +11,52 @@
   padding: 0;
   width: 100%;
   height: 100%;
+  font-family: Roboto, sans-serif;
 }
 
 app-root {
   flex: 1 0 0;
+}
+
+ng-pane-manager {
+  lib-ng-pane-tab, lib-ng-pane-header {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 8px;
+    height: 16px;
+    border-top: 1px solid transparent;
+    color: #eee;
+    font-size: 13px;
+    font-weight: 500;
+    font-variant: small-caps;
+  }
+
+  lib-ng-pane-header, lib-ng-pane-tab-row {
+    background: #438;
+  }
+
+  .lib-ng-pane-header-icon, .lib-ng-pane-tab-icon {
+    height: 100%;
+    margin-right: 8px;
+  }
+
+  .lib-ng-pane-header-title, .lib-ng-pane-tab-title {
+    line-height: 16px;
+  }
+
+  lib-ng-pane-tab {
+    &.active {
+      background: #549;
+      border-top: 1px solid #baf;
+    }
+  }
+
+  lib-ng-pane-branch-thumb {
+    background: #213;
+
+    &.vertical {
+      margin: -3px 0;
+    }
+  }
 }
