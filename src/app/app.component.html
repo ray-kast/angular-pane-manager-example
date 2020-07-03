@@ -4,9 +4,7 @@
     class="pane-content" style="background: #18a">
     My title is {{panel.title | async}}!
     <br>
-    My icon is <a href="{{panel.icon | async}}">here</a>.
-    <br>
-    Main content
+    <img alt="icon" [src]="panel.icon | async">
 </div>
 
 <div *ngPane="let panel named 'main2' for man withTitle 'More' withIcon 'http://rk1024.net/images/rk.png'"
