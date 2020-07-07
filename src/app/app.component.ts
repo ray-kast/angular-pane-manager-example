@@ -1,12 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {loadLayout, PaneLayout, saveLayout} from 'projects/angular-pane-manager/src/public-api';
+import {Component} from '@angular/core';
+import {
+    loadLayout,
+    PaneLayout,
+    paneProps,
+    StringHeaderMode,
+} from 'projects/angular-pane-manager/src/public-api';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     // TODO: add a tagged template for making writing layouts easier?
     // TODO: fix completed-docs tslint rule
     paneLayout: PaneLayout = loadLayout({
@@ -69,21 +74,7 @@ export class AppComponent implements OnInit {
             ],
     });
 
-    ngOnInit() {
-        console.log(saveLayout(this.paneLayout));
-        console.log(saveLayout(
-            loadLayout({
-                split: 'horiz',
-                ratio: [1, 1],
-                children: [
-                    {id: 'fucc', template: 'fucc'},
-                    {
-                        split: 'horiz',
-                        ratio: [2, 3],
-                        children:
-                            [{id: 'fucc2', template: 'fucc'}, {id: 'fucc3', template: 'fucc'}],
-                    },
-                ],
-            }).simplifyDeep()!));
+    protected props(mode: StringHeaderMode, title: string, icon: string, closable: boolean) {
+        return paneProps(mode, title, icon, closable);
     }
 }

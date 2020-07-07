@@ -1,43 +1,43 @@
 <ng-pane-manager id="man" #man [layout]="paneLayout"></ng-pane-manager>
 
-<div *ngPane="let panel named 'main1' for man withTitle 'Main' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'main1' for man withProps props('alwaysTab', 'Main', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #18a">
     My title is {{panel.title | async}}!
     <br>
     <img alt="icon" [src]="panel.icon | async">
 </div>
 
-<div *ngPane="let panel named 'main2' for man withTitle 'More' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'main2' for man withProps props('alwaysTab', 'More', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #17b">
     More content
 </div>
 
-<div *ngPane="let panel named 'sideLeft' for man withTitle 'Left' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'sideLeft' for man withProps props('visible', 'Left', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #765">
     Left sidebar
 </div>
 
-<div *ngPane="let panel named 'sideRight' for man withTitle 'Right' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'sideRight' for man withProps props('visible', 'Right', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #567">
     Right sidebar
 </div>
 
-<div *ngPane="let panel named 'top' for man withTitle 'Toolbar' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'top' for man withProps props('hidden', 'Toolbar', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #3a3">
     Toolbar
 </div>
 
-<div *ngPane="let panel named 'bottom1' for man withTitle 'Bottom 1' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'bottom1' for man withProps props('alwaysTab', 'Bottom 1', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #a43">
     Bottom tab 1
 </div>
 
-<div *ngPane="let panel named 'bottom2' for man withTitle 'Bottom 2' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'bottom2' for man withProps props('alwaysTab', 'Bottom 2', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #a36">
     Bottom tab 2
 </div>
 
-<div *ngPane="let panel named 'bottom3' for man withTitle 'Bottom 3' withIcon 'http://rk1024.net/images/rk.png'"
+<div *ngPane="let panel template 'bottom3' for man withProps props('alwaysTab', 'Bottom 3', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #b22">
     Bottom tab 3
 </div>
