@@ -19,7 +19,7 @@ app-root {
 }
 
 ng-pane-manager {
-  lib-ng-pane-tab, lib-ng-pane-header {
+  lib-ng-pane-header, lib-ng-pane-tab {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -46,16 +46,16 @@ ng-pane-manager {
   }
 
   lib-ng-pane-tab {
-    &.active {
+    &.lib-ng-pane-tab-active {
       background: #549;
       border-top: 1px solid #baf;
     }
   }
 
-  lib-ng-pane-branch-thumb {
+  lib-ng-pane-split-thumb {
     background: #213;
 
-    &.vertical {
+    &.lib-ng-pane-split-thumb-vert {
       margin: -3px 0;
     }
   }
