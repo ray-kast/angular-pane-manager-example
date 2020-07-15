@@ -11,6 +11,8 @@
 <div *ngPaneTemplate="let panel named 'main2' for man withHeader header('alwaysTab', 'More', 'http://rk1024.net/images/rk.png', true)"
     class="pane-content" style="background: #17b">
     More content
+    <br>
+    <button (click)="changeLayout()">Click me, if you dare!</button>
 </div>
 
 <div *ngPaneTemplate="let panel named 'sideLeft' for man withHeader header('visible', 'Left', 'http://rk1024.net/images/rk.png', true)"
