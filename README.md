@@ -1,4 +1,6 @@
-# angular-pane-manager-example
+# `angular-pane-manager-example`
+
+![screenshot](etc/screenshot.png)
 
 This project shows off a simple example usage of [`angular-pane-manager`] and provides the Angular project scaffolding to build and publish the library.
 
@@ -6,25 +8,25 @@ This project shows off a simple example usage of [`angular-pane-manager`] and pr
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
 
-## Development server
+## Getting Started
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To get up and running for the first time, you will need to pull Git submodules and JS dependencies.  To do this, use the following two commands:
 
-## Code scaffolding
+```sh
+$ git submodule update --init --recursive
+$ yarn install
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+And now, you should be able to run the project with `yarn start`.  If you have the Angular CLI installed, `ng serve` should also work.
 
-## Build
+The submodule `projects/angular-pane-manager` usually tracks the master branch of [`angular-pane-manager`], but you can verify this by checking the logs as follows:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```sh
+$ cd projects/angular-pane-manager
+$ git show -q HEAD
+```
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Git will indicate which branch the current HEAD of the submodule is tracking.
 
 ## Further help
 
