@@ -59,4 +59,9 @@ ng-pane-manager {
       margin: -3px 0;
     }
   }
+
+  lib-ng-pane.lib-ng-pane-floating {
+    border-radius: 4px;
+    box-shadow: 0 10px 20px rgba(black, 0.4), 0 10px 10px rgba(black, 0.2);
+  }
 }
