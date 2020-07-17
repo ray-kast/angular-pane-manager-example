@@ -1,5 +1,7 @@
 # `angular-pane-manager-example`
 
+There's currently a live demo of this project running [here](https://ryan-s.net/angular-pane-manager/)!
+
 ![screenshot](etc/screenshot.png)
 
 This project shows off a simple example usage of [`angular-pane-manager`] and provides the Angular project scaffolding to build and publish the library.

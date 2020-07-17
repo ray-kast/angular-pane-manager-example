@@ -1,67 +1,119 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
 
 :root {
-  font-size: 16px;
+    font-size: 16px;
 }
 
-:root, html, body {
-  display: flex;
-  flex-flow: column nowrap;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: Roboto, sans-serif;
+:root,
+html,
+body {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Roboto, sans-serif;
 }
 
 app-root {
-  flex: 1 0 0;
+    flex: 1 0 0;
 }
 
 ng-pane-manager {
-  lib-ng-pane-header, lib-ng-pane-tab {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    padding: 8px;
-    height: 16px;
-    border-top: 1px solid transparent;
-    color: #eee;
-    font-size: 13px;
-    font-weight: 500;
-    font-variant: small-caps;
-  }
+    $header-size: 16px;
+    $header-padding: 8px;
+    $header-height: $header-size + 2 * $header-padding;
 
-  lib-ng-pane-header, lib-ng-pane-tab-row {
-    background: #438;
-  }
-
-  .lib-ng-pane-header-icon, .lib-ng-pane-tab-icon {
-    height: 100%;
-    margin-right: 8px;
-  }
-
-  .lib-ng-pane-header-title, .lib-ng-pane-tab-title {
-    line-height: 16px;
-  }
-
-  lib-ng-pane-tab {
-    &.lib-ng-pane-tab-active {
-      background: #549;
-      border-top: 1px solid #baf;
+    lib-ng-pane-header,
+    lib-ng-pane-tab {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        padding: $header-padding;
+        height: $header-size;
+        border-top: 1px solid transparent;
+        color: #eee;
+        font-size: 13px;
+        font-weight: 500;
+        font-variant: small-caps;
     }
-  }
 
-  lib-ng-pane-split-thumb {
-    background: #213;
-
-    &.lib-ng-pane-split-thumb-vert {
-      margin: -3px 0;
+    lib-ng-pane-header,
+    lib-ng-pane-tab-row {
+        background: #438;
     }
-  }
 
-  lib-ng-pane.lib-ng-pane-floating {
-    border-radius: 4px;
-    box-shadow: 0 10px 20px rgba(black, 0.4), 0 10px 10px rgba(black, 0.2);
-  }
+    .lib-ng-pane-header-icon,
+    .lib-ng-pane-tab-icon {
+        height: 100%;
+        margin-right: 8px;
+    }
+
+    .lib-ng-pane-header-title,
+    .lib-ng-pane-tab-title {
+        line-height: 16px;
+    }
+
+    .lib-ng-pane-header-close,
+    .lib-ng-pane-tab-close {
+        margin: 0 0 0 $header-padding;
+        padding: 0;
+        background: none;
+        border: none;
+
+        &::after {
+            content: "x";
+
+            display: block;
+            margin: (-$header-padding);
+            box-sizing: border-box;
+            padding: $header-padding;
+            width: $header-height;
+            height: $header-height;
+            color: #eee;
+            font-family: Roboto, sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 16px;
+            text-align: center;
+        }
+
+        &:hover::after {
+            background: rgba(#baf, 0.3);
+        }
+
+        &:active::after, &:hover:active::after {
+            background: rgba(black, 0.3);
+        }
+    }
+
+    .lib-ng-pane-tab-close {
+        margin-right: $header-padding
+    }
+
+    lib-ng-pane-tab {
+        &.lib-ng-pane-tab-active {
+            background: #549;
+            border-top: 1px solid #baf;
+        }
+
+        &:hover:not(.lib-ng-pane-tab-active) {
+            background: rgba(#549, 0.5);
+            border-top: 1px solid rgba(#baf, 0.5);
+        }
+    }
+
+    lib-ng-pane-split-thumb {
+        background: #213;
+
+        &.lib-ng-pane-split-thumb-vert {
+            margin: -3px 0;
+        }
+    }
+
+    lib-ng-pane.lib-ng-pane-floating {
+        border-radius: 4px;
+        box-shadow: 0 10px 20px rgba(black, 0.4), 0 10px 10px rgba(black, 0.2);
+    }
 }

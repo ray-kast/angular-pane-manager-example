@@ -79,13 +79,13 @@ export class AppComponent {
         }).intoRoot();
 
     /** Add headerStyle to the template context */
-    protected header(mode: StringHeaderMode, title: string, icon: string, closable: boolean):
+    public header(mode: StringHeaderMode, title: string, icon: string, closable: boolean):
         PaneHeaderStyle {
         return headerStyle(mode, title, icon, closable);
     }
 
     /** Helper function to test re-rendering the layout when it changes */
-    protected changeLayout(): void {
+    public changeLayout(): void {
         this.paneLayout =
             loadLayout({
                 split: 'vert',
