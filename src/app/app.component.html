@@ -1,55 +1,49 @@
 <ng-pane-manager id="man" [layout]="paneLayout"></ng-pane-manager>
 
-<div *ngPaneTemplate="let panel named 'main1' withHeader header('alwaysTab', 'Main', 'assets/icon.png', true);
-    let header = header; let extra = extra" class="pane-content" style="background: #18a">
-    My title is {{header.title | async}}!
-    <br>
-    Icon: <img alt="icon" [src]="header.icon | async" style="height: 2rem; display: inline-block">
-    <p>I am {{extra}}!</p>
-</div>
-
-<div *ngPaneTemplate="let panel named 'main2' withHeader header('alwaysTab', 'More', 'assets/icon.png', true);
-    let extra = extra" class="pane-content" style="background: #17b">
-    More content
-    <br>
-    <p>I am {{extra}}!</p>
-</div>
-
-<div *ngPaneTemplate="let panel named 'sideLeft' withHeader header('visible', 'Left', 'assets/icon.png', true);
-    let extra = extra" class="pane-content" style="background: #765">
-    Left sidebar
-    <p>I am {{extra}}!</p>
-</div>
-
-<div *ngPaneTemplate="let panel named 'sideRight' withHeader header('visible', 'Right', 'assets/icon.png', true);
-    let extra = extra" class="pane-content" style="background: #567">
-    Right sidebar
-    <p>I am {{extra}}!</p>
-</div>
+<app-motd *ngPaneTemplate="let pane named 'motd' withHeader header('visible', 'MoTD', undefined, true);
+    let motd = extra" [motd]="motd"></app-motd>
 
 <div *ngPaneTemplate="let panel named 'top' withHeader header('hidden', 'Toolbar', 'assets/icon.png', false);
     let extra = extra" class="pane-content" style="background: #3a3">
     Toolbar
     <p>This is a demo of <a href="https://github.com/openopus/ng-pane-manager2" target="_blank"
             rel="noopener noreferrer">angular-pane-manager</a>! Drag any tab or header to move a pane.</p>
-    <p>I am {{extra}}!</p>
-    <button (click)="changeLayout()">Click me, if you dare!</button>
+    <button (click)="changeLayout()">Reset Layout</button>
 </div>
 
-<div *ngPaneTemplate="let panel named 'bottom1' withHeader header('alwaysTab', 'Bottom 1', 'assets/icon.png', true);
-    let extra = extra" class="pane-content" style="background: #a43">
+<ng-template #main1Motd>
+    <div style="background: #eee">
+        <em>Eat your ｖｅｇｅｔａｌ</em>
+    </div>
+</ng-template>
+
+<ng-template #main2Motd>
+    <div style="background: #aaa">
+        <strong>Consume ｄｒｉｎｃｃ</strong>
+    </div>
+</ng-template>
+
+<div *ngPaneTemplate="let panel named 'sideLeft' withHeader header('visible', 'Left', 'assets/icon.png', true)"
+    class="pane-content" style="background: #765">
+    Left sidebar
+</div>
+
+<div *ngPaneTemplate="let panel named 'sideRight' withHeader header('visible', 'Right', 'assets/icon.png', true)"
+    class="pane-content" style="background: #567">
+    Right sidebar
+</div>
+
+<div *ngPaneTemplate="let panel named 'bottom1' withHeader header('alwaysTab', 'Bottom 1', 'assets/icon.png', true)"
+    class="pane-content" style="background: #a43">
     Bottom tab 1
-    <p>I am {{extra}}!</p>
 </div>
 
-<div *ngPaneTemplate="let panel named 'bottom2' withHeader header('alwaysTab', 'Bottom 2', 'assets/icon.png', true);
-    let extra = extra" class="pane-content" style="background: #a36">
+<div *ngPaneTemplate="let panel named 'bottom2' withHeader header('alwaysTab', 'Bottom 2', 'assets/icon.png', true)"
+    class="pane-content" style="background: #a36">
     Bottom tab 3
-    <p>I am {{extra}}!</p>
 </div>
 
-<div *ngPaneTemplate="let panel named 'bottom3' withHeader header('alwaysTab', 'Bottom 3', 'assets/icon.png', true);
-    let extra = extra" class="pane-content" style="background: #b22">
+<div *ngPaneTemplate="let panel named 'bottom3' withHeader header('alwaysTab', 'Bottom 3', 'assets/icon.png', true)"
+    class="pane-content" style="background: #b22">
     Bottom tab 3
-    <p>I am {{extra}}!</p>
 </div>
