@@ -1,7 +1,7 @@
 <ng-pane-manager id="man" [layout]="paneLayout"></ng-pane-manager>
 
-<app-motd *ngPaneTemplate="let pane named 'motd' withHeader header('visible', 'MoTD', undefined, true);
-    let motd = extra" [motd]="motd"></app-motd>
+<app-motd *ngPaneTemplate="let pane named 'motd'; let extra = extra" [motd]="extra.motd" [title]="extra.title"
+    (header)="pane.header = $event"></app-motd>
 
 <div *ngPaneTemplate="let panel named 'top' withHeader header('hidden', 'Toolbar', 'assets/icon.png', false);
     let extra = extra" class="pane-content" style="background: #3a3">

@@ -9,8 +9,16 @@ import {
     StringHeaderMode,
 } from 'projects/angular-pane-manager/src/public-api';
 
+/** Important message information for the MoTD component */
+interface Motd {
+    /** An important message */
+    motd: TemplateRef<any>;
+    /** An important title */
+    title: string;
+}
+
 /** Type alias for the pane template type for this component */
-type Template = LayoutTemplate<TemplateRef<any>|undefined>;
+type Template = LayoutTemplate<Motd|undefined>;
 
 /** Root component of the app */
 @Component({
@@ -36,11 +44,11 @@ export class AppComponent implements AfterViewInit {
 
     // TODO: add a tagged template for making writing layouts easier?
     /** Layout of the main pane manager */
-    public paneLayout: RootLayout<TemplateRef<any>|undefined> = new RootLayout(undefined);
+    public paneLayout: RootLayout<Motd|undefined> = new RootLayout(undefined);
 
     /** Helper function for making a MoTD pane */
-    private motd(id: string, extra: TemplateRef<any>): Template {
-        return {id, template: 'motd', extra};
+    private motd(id: string, motd: TemplateRef<any>, title: string): Template {
+        return {id, template: 'motd', extra: {motd, title}};
     }
 
     /** Set up the layout once the templates are ready */
@@ -74,8 +82,8 @@ export class AppComponent implements AfterViewInit {
                                         split: 'horiz',
                                         ratio: [1, 1],
                                         children: [
-                                            this.motd('main1', this.main1Motd),
-                                            this.motd('main2', this.main2Motd),
+                                            this.motd('main1', this.main1Motd, 'Message the 1st'),
+                                            this.motd('main2', this.main2Motd, 'Message the 2th'),
                                         ],
                                     },
                                     {
