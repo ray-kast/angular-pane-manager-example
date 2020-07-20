@@ -7,7 +7,7 @@ describe('MotdComponent', () => {
     let fixture: ComponentFixture<MotdComponent>;
 
     beforeEach(async(() => {
-        TestBed.configureTestingModule({declarations: [MotdComponent]}).compileComponents();
+        void TestBed.configureTestingModule({declarations: [MotdComponent]}).compileComponents();
     }));
 
     beforeEach(() => {
@@ -16,5 +16,5 @@ describe('MotdComponent', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => { expect(component).toBeTruthy(); });
+    it('should create', () => { void expect(component).toBeTruthy(); });
 });

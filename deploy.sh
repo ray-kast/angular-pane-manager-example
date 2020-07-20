@@ -10,8 +10,7 @@ if [ -z "$ADDRESS" ]; then
 fi
 
 echo $'\x1b[1mLinting...\x1b[m'
-tslint --project projects/angular-pane-manager/tsconfig.lib.json || exit $?
-tslint --project tsconfig.app.json || exit $?
+./lint.sh
 
 echo $'\x1b[1mBuilding...\x1b[m'
 ng build --prod || exit $?
