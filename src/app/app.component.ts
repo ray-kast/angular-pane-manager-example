@@ -34,7 +34,7 @@ export class AppComponent implements AfterViewInit {
 
     /** The toolbar panel */
     private readonly toolbar:
-        Template = {gravity: 'top', id: 'top', template: 'top', extra: undefined};
+        Template = {gravity: 'header', id: 'top', template: 'top', extra: undefined};
     /** The left sidebar panel */
     private readonly leftSidebar:
         Template = {gravity: 'left', id: 'left', template: 'sideLeft', extra: undefined};
@@ -78,7 +78,7 @@ export class AppComponent implements AfterViewInit {
                                 ratio: [2, 1],
                                 children: [
                                     {
-                                        gravity: 'center',
+                                        gravity: 'main',
                                         split: 'horiz',
                                         ratio: [1, 1],
                                         children: [
