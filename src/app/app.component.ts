@@ -2,7 +2,9 @@
 import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {
     headerStyle,
+    LayoutGravity,
     LayoutTemplate,
+    LeafLayout,
     loadLayout,
     PaneHeaderStyle,
     RootLayout,
@@ -32,15 +34,15 @@ export class AppComponent implements AfterViewInit {
     /** The second MoTD */
     @ViewChild('main2Motd') private readonly main2Motd!: TemplateRef<any>;
 
-    /** The toolbar panel */
-    private readonly toolbar:
-        Template = {gravity: 'header', id: 'top', template: 'top', extra: undefined};
-    /** The left sidebar panel */
-    private readonly leftSidebar:
-        Template = {gravity: 'left', id: 'left', template: 'sideLeft', extra: undefined};
-    /** The right sidebar panel */
-    private readonly rightSidebar:
-        Template = {gravity: 'right', id: 'right', template: 'sideRight', extra: undefined};
+    // /** The toolbar panel */
+    // private readonly toolbar:
+    //     Template = {gravity: 'header', id: 'top', template: 'top', extra: undefined};
+    // /** The left sidebar panel */
+    // private readonly leftSidebar:
+    //     Template = {gravity: 'left', id: 'left', template: 'sideLeft', extra: undefined};
+    // /** The right sidebar panel */
+    // private readonly rightSidebar:
+    //     Template = {gravity: 'right', id: 'right', template: 'sideRight', extra: undefined};
 
     // TODO: add a tagged template for making writing layouts easier?
     /** Layout of the main pane manager */
@@ -62,63 +64,46 @@ export class AppComponent implements AfterViewInit {
 
     /** Helper function to test re-rendering the layout when it changes */
     public changeLayout(): void {
-        this.paneLayout =
+        const layout = [
+            new LeafLayout('top', 'top', undefined, LayoutGravity.Header),
+            new LeafLayout('left', 'sideLeft', undefined, LayoutGravity.Left),
+            new LeafLayout('right', 'sideRight', undefined, LayoutGravity.Right),
             loadLayout({
-                split: 'vert',
-                ratio: [1, 4],
+                gravity: 'main',
+                split: 'horiz',
+                ratio: [1, 1],
                 children: [
-                    this.toolbar,
-                    {
-                        split: 'horiz',
-                        ratio: [1, 3, 1],
-                        children: [
-                            this.leftSidebar,
-                            {
-                                split: 'vert',
-                                ratio: [2, 1],
-                                children: [
-                                    {
-                                        gravity: 'main',
-                                        split: 'horiz',
-                                        ratio: [1, 1],
-                                        children: [
-                                            this.motd('main1', this.main1Motd, 'Message the 1st'),
-                                            this.motd('main2', this.main2Motd, 'Message the 2th'),
-                                        ],
-                                    },
-                                    {
-                                        gravity: 'bottom',
-                                        split: 'tab',
-                                        currentTab: 0,
-                                        children: [
-                                            {id: 'bottom1', template: 'bottom1', extra: undefined},
-                                            {id: 'bottom2', template: 'bottom2', extra: undefined},
-                                            {
-                                                split: 'horiz',
-                                                ratio: [1, 1],
-                                                children: [
-                                                    {
-                                                        id: 'bottom3l',
-                                                        template: 'bottom3',
-                                                        extra: undefined,
-                                                    },
-                                                    {
-                                                        id: 'bottom3r',
-                                                        template: 'bottom1',
-                                                        extra: undefined,
-                                                    },
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                ],
-                            },
-                            this.rightSidebar,
-                        ],
-                    },
+                    this.motd('main1', this.main1Motd, 'Message the 1st'),
+                    this.motd('main2', this.main2Motd, 'Message the 2th'),
                 ],
             },
-                       x => x)
-                .intoRoot();
+                       x => x),
+            new LeafLayout('bottom1', 'bottom1', undefined, LayoutGravity.Bottom),
+            new LeafLayout('bottom2', 'bottom2', undefined, LayoutGravity.Bottom),
+            loadLayout({
+                gravity: 'bottom',
+                split: 'horiz',
+                ratio: [1, 1],
+                children: [
+                    {id: 'bottom3l', template: 'bottom3', extra: undefined},
+                    {id: 'bottom3r', template: 'bottom1', extra: undefined},
+                ],
+            },
+                       x => x),
+        ].reduce<RootLayout<Motd|undefined>|undefined>((root, pane) => {
+            if (root === undefined) { return undefined; }
+
+            const next = root.withChildByGravity(pane);
+            if (next === undefined) { return undefined; }
+
+            return next.intoRoot();
+        }, new RootLayout(undefined));
+
+        if (layout === undefined) { throw new Error('unable to construct layout'); }
+
+        // tslint:disable no-console
+        console.log(layout);
+
+        this.paneLayout = layout;
     }
 }

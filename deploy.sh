@@ -33,7 +33,9 @@ while getopts "hnu" opt; do
     esac
 done
 
-if (( $# != 1 )); then
+shift $((OPTIND - 1))
+
+if (( $# != 0 )); then
     usage
     exit 1
 fi
