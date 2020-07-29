@@ -6,9 +6,7 @@ There's currently a live demo of this project running [here](https://ryan-s.net/
 
 This project shows off a simple example usage of [`angular-pane-manager`] and provides the Angular project scaffolding to build and publish the library.
 
-`app.component.html` and `app.component.ts` show off some basics of the library, such as pane creation and layout save/restore.  `app.component.scss` contains a minimal stylesheet for the pane manager components.
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.0.
+`app.component.html` and `app.component.ts` show off some basics of the library, such as pane creation and layout save/restore.  `styles.scss` contains a minimal stylesheet for the pane manager components.
 
 ## Getting Started
 
@@ -30,8 +28,20 @@ $ git show -q HEAD
 
 Git will indicate which branch the current HEAD of the submodule is tracking.
 
+## Building and Running
+
+To run the Webpack dev server, simply run `ng serve` or `yarn start`, and to build the project use `ng build` or `yarn build`.
+
+To lint the project, run `./lint.sh`.  To run a production build of the project, run `./deploy.sh -n`, or `./deploy.sh -ln` to run a production build of the `angular-pane-manager` library.  For more info on these scripts you can run `./lint.sh -h` and `./deploy.sh -h`.
+
+## Testing
+
+To launch the unit test runner, use `ng test angular-pane-manager`.  Unit testing for `angular-pane-manager` is done with the default Karma and Jasmine setup, augmented with [`fast-check`] for running property tests, and [`chai`] for providing throwable assertions, which are required in order for `fast-check` to function properly.
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 [`angular-pane-manager`]: https://github.com/openopus/ng-pane-manager2
+[`fast-check`]: https://github.com/dubzzz/fast-check
+[`chai`]: https://github.com/chaijs/chai
