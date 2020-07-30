@@ -3,6 +3,9 @@
 <app-motd *ngPaneTemplate="let pane named 'motd'; let extra = extra" [motd]="extra.motd" [title]="extra.title"
     (header)="pane.header = $event"></app-motd>
 
+<app-editor *ngPaneTemplate="let pane named 'editor'; let extra = extra" [title]="extra.title"
+    (header)="pane.header = $event"></app-editor>
+
 <div *ngPaneTemplate="let panel named 'top' withHeader header('hidden', 'Toolbar', 'assets/icon.png', false);
     let extra = extra" class="pane-content" style="background: #3a3">
     Toolbar

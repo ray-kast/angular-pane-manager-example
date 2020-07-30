@@ -19,8 +19,17 @@ interface Motd {
     title: string;
 }
 
+/** Editor configuration */
+interface Editor {
+    /** The editor title */
+    title: string;
+}
+
+/** Extra data for every leaf */
+type Extra = Motd|Editor|undefined;
+
 /** Type alias for the pane template type for this component */
-type Template = LayoutTemplate<Motd|undefined>;
+type Template = LayoutTemplate<Extra>;
 
 /** Root component of the app */
 @Component({
@@ -34,19 +43,9 @@ export class AppComponent implements AfterViewInit {
     /** The second MoTD */
     @ViewChild('main2Motd') private readonly main2Motd!: TemplateRef<any>;
 
-    // /** The toolbar panel */
-    // private readonly toolbar:
-    //     Template = {gravity: 'header', id: 'top', template: 'top', extra: undefined};
-    // /** The left sidebar panel */
-    // private readonly leftSidebar:
-    //     Template = {gravity: 'left', id: 'left', template: 'sideLeft', extra: undefined};
-    // /** The right sidebar panel */
-    // private readonly rightSidebar:
-    //     Template = {gravity: 'right', id: 'right', template: 'sideRight', extra: undefined};
-
     // TODO: add a tagged template for making writing layouts easier?
     /** Layout of the main pane manager */
-    public paneLayout: RootLayout<Motd|undefined> = new RootLayout(undefined);
+    public paneLayout: RootLayout<Extra> = new RootLayout(undefined);
 
     /** Helper function for making a MoTD pane */
     private motd(id: string, motd: TemplateRef<any>, title: string): Template {
@@ -68,29 +67,31 @@ export class AppComponent implements AfterViewInit {
             new LeafLayout('top', 'top', undefined, LayoutGravity.Header),
             new LeafLayout('left', 'sideLeft', undefined, LayoutGravity.Left),
             new LeafLayout('right', 'sideRight', undefined, LayoutGravity.Right),
-            loadLayout({
-                gravity: 'main',
-                split: 'horiz',
-                ratio: [1, 1],
-                children: [
-                    this.motd('main1', this.main1Motd, 'Message the 1st'),
-                    this.motd('main2', this.main2Motd, 'Message the 2th'),
-                ],
-            },
-                       x => x),
-            new LeafLayout('bottom1', 'bottom1', undefined, LayoutGravity.Bottom),
-            new LeafLayout('bottom2', 'bottom2', undefined, LayoutGravity.Bottom),
+            new LeafLayout('editor1', 'editor', {title: 'Untitled-1'}, LayoutGravity.Main),
+            new LeafLayout('editor2', 'editor', {title: 'Untitled-2'}, LayoutGravity.Main),
             loadLayout({
                 gravity: 'bottom',
                 split: 'horiz',
                 ratio: [1, 1],
                 children: [
-                    {id: 'bottom3l', template: 'bottom3', extra: undefined},
-                    {id: 'bottom3r', template: 'bottom1', extra: undefined},
+                    this.motd('motd1', this.main1Motd, 'Message the 1st'),
+                    this.motd('motd2', this.main2Motd, 'Message the 2th'),
                 ],
             },
                        x => x),
-        ].reduce<RootLayout<Motd|undefined>|undefined>((root, pane) => {
+            new LeafLayout('bottom1', 'bottom1', undefined, LayoutGravity.Footer),
+            // new LeafLayout('bottom2', 'bottom2', undefined, LayoutGravity.Bottom),
+            // loadLayout({
+            //     gravity: 'bottom',
+            //     split: 'horiz',
+            //     ratio: [1, 1],
+            //     children: [
+            //         {id: 'bottom3l', template: 'bottom3', extra: undefined},
+            //         {id: 'bottom3r', template: 'bottom1', extra: undefined},
+            //     ],
+            // },
+            //            x => x),
+        ].reduce<RootLayout<Extra>|undefined>((root, pane) => {
             if (root === undefined) { return undefined; }
 
             const next = root.withChildByGravity(pane);
