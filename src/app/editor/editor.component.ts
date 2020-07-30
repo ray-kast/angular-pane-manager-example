@@ -3,6 +3,7 @@ import {Component, Input, Output} from '@angular/core';
 import {PaneHeaderMode, PaneHeaderStyle} from 'projects/angular-pane-manager/src/public-api';
 import {BehaviorSubject, Observable} from 'rxjs';
 
+// TODO: add an abstract component class to make custom headers easier
 /**
  * A text editor
  */
@@ -13,7 +14,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 })
 export class EditorComponent {
     /** See title */
-    private readonly $title: BehaviorSubject<string>           = new BehaviorSubject('');
+    private readonly $title: BehaviorSubject<string> = new BehaviorSubject('');
     /** See header */
     private readonly $header: BehaviorSubject<PaneHeaderStyle> = new BehaviorSubject({
         headerMode: PaneHeaderMode.AlwaysTab as PaneHeaderMode,

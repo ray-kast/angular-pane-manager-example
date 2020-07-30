@@ -1,4 +1,4 @@
-<ng-pane-manager id="man" [layout]="paneLayout"></ng-pane-manager>
+<ng-pane-manager id="man" [(layout)]="paneLayout"></ng-pane-manager>
 
 <app-motd *ngPaneTemplate="let pane named 'motd'; let extra = extra" [motd]="extra.motd" [title]="extra.title"
     (header)="pane.header = $event"></app-motd>
@@ -9,9 +9,14 @@
 <div *ngPaneTemplate="let panel named 'top' withHeader header('hidden', 'Toolbar', 'assets/icon.png', false);
     let extra = extra" class="pane-content" style="background: #3a3">
     Toolbar
-    <p>This is a demo of <a href="https://github.com/openopus/ng-pane-manager2" target="_blank"
-            rel="noopener noreferrer">angular-pane-manager</a>! Drag any tab or header to move a pane.</p>
-    <button (click)="changeLayout()">Reset Layout</button>
+    <p>
+        This is a demo of <a href="https://github.com/openopus/ng-pane-manager2" target="_blank"
+            rel="noopener noreferrer">angular-pane-manager</a>! Drag any tab or header to move a pane.
+    </p>
+    <p>
+        Feel free to refresh the page &mdash; the grid layout will be saved and restored, just for you!
+    </p>
+    <button (click)="resetLayout()">Reset Layout</button>
 </div>
 
 <ng-template #main1Motd>
