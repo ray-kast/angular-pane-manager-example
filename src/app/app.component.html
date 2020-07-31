@@ -1,4 +1,4 @@
-<ng-pane-manager id="man" [(layout)]="paneLayout"></ng-pane-manager>
+<ng-pane-manager id="man" class="ng-theme-default" [(layout)]="paneLayout"></ng-pane-manager>
 
 <app-motd *ngPaneTemplate="let pane named 'motd'; let extra = extra" [motd]="extra.motd" [title]="extra.title"
     (header)="pane.header = $event"></app-motd>
@@ -8,8 +8,7 @@
     [onResize]="pane.onResize"></app-editor>
 
 <div *ngPaneTemplate="let panel named 'top' withHeader header('hidden', 'Toolbar', 'assets/icon.png', false);
-    let extra = extra" class="pane-content" style="background: #3a3">
-    Toolbar
+    let extra = extra" class="pane-content">
     <p>
         This is a demo of <a href="https://github.com/openopus/ng-pane-manager2" target="_blank"
             rel="noopener noreferrer">angular-pane-manager</a>! Drag any tab or header to move a pane.
@@ -22,28 +21,28 @@
 </div>
 
 <ng-template #main1Motd>
-    <div style="background: #eee">
+    <div style="background: #3b434b">
         <em>Eat your ｖｅｇｅｔａｌ</em>
     </div>
 </ng-template>
 
 <ng-template #main2Motd>
-    <div style="background: #aaa">
+    <div style="background: #2e3236">
         <strong>Consume ｄｒｉｎｃｃ</strong>
     </div>
 </ng-template>
 
 <div *ngPaneTemplate="let panel named 'sideLeft' withHeader header('visible', 'Left', 'assets/icon.png', true)"
-    class="pane-content" style="background: #765">
+    class="pane-content">
     Left sidebar
 </div>
 
 <div *ngPaneTemplate="let panel named 'sideRight' withHeader header('visible', 'Right', 'assets/icon.png', true)"
-    class="pane-content" style="background: #567">
+    class="pane-content">
     Right sidebar
 </div>
 
 <div *ngPaneTemplate="let panel named 'footer' withHeader header('hidden', 'Footer', 'assets/icon.png', false)"
-    class="pane-content" style="background: #a43">
+    class="pane-content">
     Footer
 </div>

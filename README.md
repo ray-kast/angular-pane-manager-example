@@ -6,7 +6,7 @@ There's currently a live demo of this project running [here](https://ryan-s.net/
 
 This project shows off a simple example usage of [`angular-pane-manager`] and provides the Angular project scaffolding to build and publish the library.
 
-`app.component.html` and `app.component.ts` show off some basics of the library, such as pane creation and layout save/restore.  `styles.scss` contains a minimal stylesheet for the pane manager components.
+`app.component.html` and `app.component.ts` show off some basics of the library, such as pane creation and layout save/restore.  `MotdComponent` and `EditorComponent` demonstrate writing components that support per-pane instancing with extra data and a customizable header.
 
 ## Getting Started
 
