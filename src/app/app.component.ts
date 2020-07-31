@@ -5,6 +5,7 @@ import {
     headerStyle,
     LayoutGravity,
     LayoutTemplate,
+    LayoutType,
     LeafLayout,
     loadLayout,
     PaneHeaderStyle,
@@ -13,6 +14,7 @@ import {
     StringHeaderMode,
 } from 'projects/angular-pane-manager/src/public-api';
 import {forkJoin, Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 
 /** Enum for differentiating extra data types */
 const enum ExtraType {
@@ -36,6 +38,8 @@ interface Editor {
     type: ExtraType.Editor;
     /** The editor title */
     title: string;
+    /** The editor contents */
+    code: string;
 }
 
 /** Extra data for every leaf */
@@ -57,6 +61,8 @@ interface EditorTemplate {
     type: 'editor';
     /** The editor title */
     title: string;
+    /** The editor contents */
+    code: string;
 }
 
 /** Template for extra leaf data */
@@ -77,11 +83,18 @@ export class AppComponent implements AfterViewInit {
     /** The second MoTD */
     @ViewChild('main2Motd') private readonly main2Motd!: TemplateRef<any>;
 
+    /** A map of the named MoTDs */
+    private readonly motds: Map<string, TemplateRef<any>> = new Map();
+
     // TODO: add a tagged template for making writing layouts easier?
     /** Layout of the main pane manager */
     private _paneLayout: RootLayout<Extra> = new RootLayout(undefined);
     /** Event for when the child templates are ready */
-    private readonly viewReady: Subject<undefined> = new Subject<undefined>();
+    private readonly viewReady: Subject<undefined> = new Subject();
+    /** The (1-based) index of the next editor to open */
+    private nextEditor: number = 1;
+    /** Request a (debounced) autosave */
+    public readonly requestAutosave: Subject<undefined> = new Subject();
 
     /** Pass the pane layout to the pane manager */
     public get paneLayout(): RootLayout<Extra> { return this._paneLayout; }
@@ -91,9 +104,7 @@ export class AppComponent implements AfterViewInit {
         if (Object.is(this._paneLayout, val)) { return; }
 
         this._paneLayout = val;
-
-        this.storage.set('paneLayout', saveLayout(this._paneLayout, this.saveExtra.bind(this)))
-            .subscribe();
+        this.saveLayout();
     }
 
     /** Construct a new app instance */
@@ -114,7 +125,22 @@ export class AppComponent implements AfterViewInit {
                     console.warn('Error loading layout: ', e);
                     this.resetLayout();
                 }
+
+                while (this.paneLayout.findChild(c => c.type === LayoutType.Leaf &&
+                                                      c.id === `editor${this.nextEditor}`) !==
+                       undefined) {
+                    this.nextEditor += 1;
+                }
             });
+
+        this.requestAutosave.pipe(debounceTime(500)).subscribe(_ => { this.saveLayout(); });
+    }
+
+    /** Save the current layout and config */
+    private saveLayout(): void {
+        this.storage
+            .set(AppComponent.LAYOUT_KEY, saveLayout(this._paneLayout, this.saveExtra.bind(this)))
+            .subscribe();
     }
 
     /** Serialize the extra data into a JSON-safe format */
@@ -125,20 +151,23 @@ export class AppComponent implements AfterViewInit {
         case ExtraType.Motd: {
             let motd;
 
-            switch (extra.motd) {
-            case this.main1Motd: motd = 'main1'; break;
-            case this.main2Motd: motd = 'main2'; break;
-            default: throw new Error('bad MoTD ID - this shouldn\'t happen');
+            for (const [name, tmpl] of this.motds) {
+                if (Object.is(extra.motd, tmpl)) {
+                    motd = name;
+                    break;
+                }
             }
+
+            if (motd === undefined) { throw new Error('bad MoTD ID - this shouldn\'t happen'); }
 
             const {title} = extra;
 
             return {type: 'motd', motd, title};
         }
         case ExtraType.Editor: {
-            const {title} = extra;
+            const {title, code} = extra;
 
-            return {type: 'editor', title};
+            return {type: 'editor', title, code};
         }
         }
     }
@@ -149,22 +178,18 @@ export class AppComponent implements AfterViewInit {
 
         switch (extra.type) {
         case 'motd': {
-            let motd;
+            const motd = this.motds.get(extra.motd);
 
-            switch (extra.motd) {
-            case 'main1': motd = this.main1Motd; break;
-            case 'main2': motd = this.main2Motd; break;
-            default: throw new Error('bad MoTD ID - this shouldn\'t happen');
-            }
+            if (motd === undefined) { throw new Error('bad MoTD ID - this shouldn\'t happen'); }
 
             const {title} = extra;
 
             return {type: ExtraType.Motd, motd, title};
         }
         case 'editor': {
-            const {title} = extra;
+            const {title, code} = extra;
 
-            return {type: ExtraType.Editor, title};
+            return {type: ExtraType.Editor, title, code};
         }
         }
     }
@@ -176,6 +201,9 @@ export class AppComponent implements AfterViewInit {
 
     /** Set up the layout once the templates are ready */
     public ngAfterViewInit(): void {
+        this.motds.set('main1', this.main1Motd);
+        this.motds.set('main2', this.main2Motd);
+
         this.viewReady.next(undefined);
         this.viewReady.complete();
     }
@@ -192,14 +220,15 @@ export class AppComponent implements AfterViewInit {
             new LeafLayout('top', 'top', undefined, LayoutGravity.Header),
             new LeafLayout('left', 'sideLeft', undefined, LayoutGravity.Left),
             new LeafLayout('right', 'sideRight', undefined, LayoutGravity.Right),
-            new LeafLayout('editor1',
-                           'editor',
-                           {type: ExtraType.Editor as ExtraType.Editor, title: 'Untitled-1'},
-                           LayoutGravity.Main),
-            new LeafLayout('editor2',
-                           'editor',
-                           {type: ExtraType.Editor as ExtraType.Editor, title: 'Untitled-2'},
-                           LayoutGravity.Main),
+            new LeafLayout<Extra>('editor1',
+                                  'editor',
+                                  {type: ExtraType.Editor, title: 'Untitled-1', code: '// Try me!'},
+                                  LayoutGravity.Main),
+            new LeafLayout<Extra>(
+                'editor2',
+                'editor',
+                {type: ExtraType.Editor, title: 'Untitled-2', code: '// Try me too!'},
+                LayoutGravity.Main),
             loadLayout({
                 gravity: 'bottom',
                 split: 'horiz',
@@ -210,18 +239,7 @@ export class AppComponent implements AfterViewInit {
                 ],
             },
                        x => x),
-            new LeafLayout('bottom1', 'bottom1', undefined, LayoutGravity.Footer),
-            // new LeafLayout('bottom2', 'bottom2', undefined, LayoutGravity.Bottom),
-            // loadLayout({
-            //     gravity: 'bottom',
-            //     split: 'horiz',
-            //     ratio: [1, 1],
-            //     children: [
-            //         {id: 'bottom3l', template: 'bottom3', extra: undefined},
-            //         {id: 'bottom3r', template: 'bottom1', extra: undefined},
-            //     ],
-            // },
-            //            x => x),
+            new LeafLayout('footer', 'footer', undefined, LayoutGravity.Footer),
         ].reduce<RootLayout<Extra>|undefined>((root, pane) => {
             if (root === undefined) { return undefined; }
 
@@ -237,5 +255,29 @@ export class AppComponent implements AfterViewInit {
         console.log(layout);
 
         this.paneLayout = layout;
+    }
+
+    /** Add a new editor tab to the layout */
+    public addEditor(): void {
+        const n = this.nextEditor;
+
+        const layout = this.paneLayout.withChildByGravity(
+            new LeafLayout(`editor${n}`,
+                           'editor',
+                           {type: ExtraType.Editor, title: `Untitled-${n}`, code: ''},
+                           LayoutGravity.Main));
+
+        if (layout === undefined) {
+            console.error('Couldn\'t add editor to layout!');
+
+            return;
+        }
+
+        this.paneLayout = layout.intoRoot();
+
+        while (this.paneLayout.findChild(c => c.type === LayoutType.Leaf &&
+                                              c.id === `editor${this.nextEditor}`) !== undefined) {
+            this.nextEditor += 1;
+        }
     }
 }

@@ -3,8 +3,9 @@
 <app-motd *ngPaneTemplate="let pane named 'motd'; let extra = extra" [motd]="extra.motd" [title]="extra.title"
     (header)="pane.header = $event"></app-motd>
 
-<app-editor *ngPaneTemplate="let pane named 'editor'; let extra = extra" [title]="extra.title"
-    (header)="pane.header = $event"></app-editor>
+<app-editor *ngPaneTemplate="let pane named 'editor'; let extra = extra" (header)="pane.header = $event"
+    [title]="extra.title" [(code)]="extra.code" (codeChange)="requestAutosave.next(undefined)"
+    [onResize]="pane.onResize"></app-editor>
 
 <div *ngPaneTemplate="let panel named 'top' withHeader header('hidden', 'Toolbar', 'assets/icon.png', false);
     let extra = extra" class="pane-content" style="background: #3a3">
@@ -17,6 +18,7 @@
         Feel free to refresh the page &mdash; the grid layout will be saved and restored, just for you!
     </p>
     <button (click)="resetLayout()">Reset Layout</button>
+    <button (click)="addEditor()">New Editor</button>
 </div>
 
 <ng-template #main1Motd>
@@ -41,17 +43,7 @@
     Right sidebar
 </div>
 
-<div *ngPaneTemplate="let panel named 'bottom1' withHeader header('alwaysTab', 'Bottom 1', 'assets/icon.png', true)"
+<div *ngPaneTemplate="let panel named 'footer' withHeader header('hidden', 'Footer', 'assets/icon.png', false)"
     class="pane-content" style="background: #a43">
-    Bottom tab 1
-</div>
-
-<div *ngPaneTemplate="let panel named 'bottom2' withHeader header('alwaysTab', 'Bottom 2', 'assets/icon.png', true)"
-    class="pane-content" style="background: #a36">
-    Bottom tab 3
-</div>
-
-<div *ngPaneTemplate="let panel named 'bottom3' withHeader header('alwaysTab', 'Bottom 3', 'assets/icon.png', true)"
-    class="pane-content" style="background: #b22">
-    Bottom tab 3
+    Footer
 </div>
