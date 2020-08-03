@@ -3,10 +3,9 @@ import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
 import {StorageMap} from '@ngx-pwa/local-storage';
 import {
     headerStyle,
-    LayoutGravity,
+    LayoutBuilder,
     LayoutTemplate,
     LayoutType,
-    LeafLayout,
     loadLayout,
     PaneHeaderStyle,
     RootLayout,
@@ -67,6 +66,8 @@ interface EditorTemplate {
 
 /** Template for extra leaf data */
 type ExtraTemplate = MotdTemplate|EditorTemplate|undefined;
+
+// TODO: save the layout when the panes are resized
 
 /** Root component of the app */
 @Component({
@@ -194,9 +195,14 @@ export class AppComponent implements AfterViewInit {
         }
     }
 
-    /** Helper function for making a MoTD pane */
-    private motd(id: string, motd: TemplateRef<any>, title: string): LayoutTemplate<Extra> {
-        return {id, template: 'motd', extra: {type: ExtraType.Motd, motd, title}};
+    /** Helper function for making MoTD extra data */
+    private motd(motd: TemplateRef<any>, title: string): Extra {
+        return {type: ExtraType.Motd, motd, title};
+    }
+
+    /** Helper function for making editor extra data */
+    private editor(title: string, code: string): Extra {
+        return {type: ExtraType.Editor, title, code};
     }
 
     /** Set up the layout once the templates are ready */
@@ -216,64 +222,36 @@ export class AppComponent implements AfterViewInit {
 
     /** Reset the layout */
     public resetLayout(): void {
-        const layout = [
-            new LeafLayout('top', 'top', undefined, LayoutGravity.Header),
-            new LeafLayout('left', 'sideLeft', undefined, LayoutGravity.Left),
-            new LeafLayout('right', 'sideRight', undefined, LayoutGravity.Right),
-            new LeafLayout<Extra>('editor1',
-                                  'editor',
-                                  {type: ExtraType.Editor, title: 'Untitled-1', code: '// Try me!'},
-                                  LayoutGravity.Main),
-            new LeafLayout<Extra>(
-                'editor2',
-                'editor',
-                {type: ExtraType.Editor, title: 'Untitled-2', code: '// Try me too!'},
-                LayoutGravity.Main),
-            loadLayout({
-                gravity: 'bottom',
-                split: 'horiz',
-                ratio: [1, 1],
-                children: [
-                    this.motd('motd1', this.main1Motd, 'Message the 1st'),
-                    this.motd('motd2', this.main2Motd, 'Message the 2th'),
-                ],
-            },
-                       x => x),
-            new LeafLayout('footer', 'footer', undefined, LayoutGravity.Footer),
-        ].reduce<RootLayout<Extra>|undefined>((root, pane) => {
-            if (root === undefined) { return undefined; }
+        const result = LayoutBuilder.empty<Extra>().build(b => {
+            b.add(
+                b.leaf('top', 'top', undefined, 'header'),
+                b.leaf('left', 'sideLeft', undefined, 'left'),
+                b.leaf('right', 'sideRight', undefined, 'right'),
+                b.leaf('editor1', 'editor', this.editor('Untitled-1', '// Try me!'), 'main'),
+                b.leaf('editor2', 'editor', this.editor('Untitled-2', '// Try me too!'), 'main'),
+                b.horiz(
+                    [
+                        b.leaf('motd1', 'motd', this.motd(this.main1Motd, 'Message the 1st')),
+                        b.leaf('motd2', 'motd', this.motd(this.main2Motd, 'Message the 2th')),
+                    ],
+                    undefined,
+                    'bottom'),
+                b.leaf('footer', 'footer', undefined, 'footer'),
+            );
+        });
 
-            const next = root.withChildByGravity(pane);
-            if (next === undefined) { return undefined; }
-
-            return next.intoRoot();
-        }, new RootLayout(undefined));
-
-        if (layout === undefined) { throw new Error('unable to construct layout'); }
-
-        // tslint:disable no-console
-        console.log(layout);
-
-        this.paneLayout = layout;
+        this.paneLayout = result.unwrap();
     }
 
     /** Add a new editor tab to the layout */
     public addEditor(): void {
         const n = this.nextEditor;
 
-        const layout = this.paneLayout.withChildByGravity(
-            new LeafLayout(`editor${n}`,
-                           'editor',
-                           {type: ExtraType.Editor, title: `Untitled-${n}`, code: ''},
-                           LayoutGravity.Main));
+        const result = LayoutBuilder.from(this.paneLayout).build(b => {
+            b.add(b.leaf(`editor${n}`, 'editor', this.editor(`Untitled-${n}`, ''), 'main'));
+        });
 
-        if (layout === undefined) {
-            console.error('Couldn\'t add editor to layout!');
-
-            return;
-        }
-
-        this.paneLayout = layout.intoRoot();
+        this.paneLayout = result.unwrap();
 
         while (this.paneLayout.findChild(c => c.type === LayoutType.Leaf &&
                                               c.id === `editor${this.nextEditor}`) !== undefined) {
