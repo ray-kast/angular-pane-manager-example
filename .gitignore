@@ -2,6 +2,7 @@
 
 # secrets
 /.deploy.env
+/.npm-password.enc
 
 # compiled output
 /dist

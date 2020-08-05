@@ -45,20 +45,6 @@ fi
 
 set -e
 
-echo $' -> projects/angular-pane-manager (lib)'
-tslint --project projects/angular-pane-manager/tsconfig.lib.json
-
-echo $' -> projects/angular-pane-manager (spec)'
-tslint --project projects/angular-pane-manager/tsconfig.spec.json
-
-if [[ -z "$lib" ]]; then
-    echo $' -> angular-pane-manager-example (app)'
-    tslint --project tsconfig.app.json
-
-    echo $' -> angular-pane-manager-example (spec)'
-    tslint --project tsconfig.spec.json
-fi
-
 if [[ -n "$mismatch" ]]; then
     package_ver=$(jq '.version' projects/angular-pane-manager/package.json -r)
 
@@ -75,4 +61,18 @@ if [[ -n "$mismatch" ]]; then
             done
         )
     done
+fi
+
+echo $' -> projects/angular-pane-manager (lib)'
+tslint --project projects/angular-pane-manager/tsconfig.lib.json
+
+echo $' -> projects/angular-pane-manager (spec)'
+tslint --project projects/angular-pane-manager/tsconfig.spec.json
+
+if [[ -z "$lib" ]]; then
+    echo $' -> angular-pane-manager-example (app)'
+    tslint --project tsconfig.app.json
+
+    echo $' -> angular-pane-manager-example (spec)'
+    tslint --project tsconfig.spec.json
 fi

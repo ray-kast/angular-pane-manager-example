@@ -6,7 +6,6 @@ import {
     LayoutBuilder,
     LayoutTemplate,
     LayoutType,
-    loadLayout,
     PaneHeaderStyle,
     RootLayout,
     saveLayout,
@@ -112,19 +111,22 @@ export class AppComponent implements AfterViewInit {
     public constructor(private readonly storage: StorageMap) {
         forkJoin([this.storage.get(AppComponent.LAYOUT_KEY), this.viewReady])
             .subscribe(([template, _]) => {
-                try {
-                    if (template !== undefined) {
-                        this._paneLayout = loadLayout(template as LayoutTemplate<ExtraTemplate>,
-                                                      this.loadExtra.bind(this))
-                                               .intoRoot();
+                const result = LayoutBuilder.empty<Extra>().build(b => {
+                    b.set(b.load(template as LayoutTemplate<ExtraTemplate>,
+                                 this.loadExtra.bind(this)));
+
+                    if (b.root.findChild(c => c.type === LayoutType.Leaf &&
+                                              c.template === 'top') === undefined) {
+                        b.add(b.leaf('top', 'top', undefined, 'header'));
                     }
-                    else {
-                        this.resetLayout();
-                    }
-                }
-                catch (e) {
-                    console.warn('Error loading layout: ', e);
+                });
+
+                if (result.err !== undefined) {
+                    console.warn('Error loading layout: ', result.err);
                     this.resetLayout();
+                }
+                else {
+                    this._paneLayout = result.ok;
                 }
 
                 while (this.paneLayout.findChild(c => c.type === LayoutType.Leaf &&
@@ -152,8 +154,8 @@ export class AppComponent implements AfterViewInit {
         case ExtraType.Motd: {
             let motd;
 
-            for (const [name, tmpl] of this.motds) {
-                if (Object.is(extra.motd, tmpl)) {
+            for (const [name, template] of this.motds) {
+                if (Object.is(extra.motd, template)) {
                     motd = name;
                     break;
                 }

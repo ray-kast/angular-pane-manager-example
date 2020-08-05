@@ -13,7 +13,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 })
 export class MotdComponent {
     /** The title of the pane */
-    private readonly $title: BehaviorSubject<string> = new BehaviorSubject('hewwo');
+    private readonly $title: BehaviorSubject<string> = new BehaviorSubject('');
     // Typescript's inference really lost it here
     /** See header */
     private readonly $header: BehaviorSubject<PaneHeaderStyle> = new BehaviorSubject({

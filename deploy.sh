@@ -74,10 +74,24 @@ fi
 
 set -e
 
+if [[ -n "$lib" && -z "$noop" ]]; then
+    echo -n ' :: Enter decryption key: '
+    read -s pass
+    echo
+fi
+
 do_yarn
 
 echo $'\x1b[1mLinting...\x1b[m'
 ./lint.sh "${lint_flags[@]}"
+
+# It would be nice to do this after the build, but it seems to overwrite build files
+echo $'\x1b[1mTesting...\x1b[m'
+
+if [[ -n "$lib" || -z "$noop" ]]; then
+    echo $'\x1b[1m -> Testing library...\x1b[m'
+    ng test angular-pane-manager --browsers=FirefoxDeveloper --watch=false
+fi
 
 echo $'\x1b[1mBuilding...\x1b[m'
 
@@ -108,8 +122,14 @@ if [[ -z "$noop" ]]; then
     echo $'\x1b[38;5;3;1mBe sure to upgrade dependencies in package.json\x1b[m'
 
     if [[ -n "$lib" ]]; then
-        cd dist/angular-pane-manager
-        yarn publish --access=public
+        (
+            set -e
+            cd dist/angular-pane-manager
+
+            yarn login
+            openssl aes-256-cbc -d -k "$pass" -iter 10000 -in .npm-password.enc | \
+                yarn publish --access=public --new-version "$(jq '.version' package.json -r)"
+        )
     fi
 
     if [[ -n "$app" ]]; then
