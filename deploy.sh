@@ -51,14 +51,19 @@ if (( $# != 0 )); then
 fi
 
 lint_flags=()
-[[ -n "$lib" && -z "$app" ]] && lint_flags+='-l'
+[[ -n "$lib" && -z "$app" ]] && lint_flags+=('-l')
+[[ -n "$lib" && -z "$noop" ]] && lint_flags+=('-V')
 
-yarn_flags=()
-if [[ -n "$noop" ]]; then
-    yarn_flags+='install'
-else
-    yarn_flags+='upgrade'
-fi
+function do_yarn() {
+    if [[ -n "$noop" ]]; then
+        yarn install -A --frozen-lockfile || return $?
+    else
+        if ! yarn upgrade -A; then
+            echo $'\x1b[1;38;5;3m -> yarn upgrade failed, attempting install...\x1b[m'
+            yarn install -A && yarn upgrade -A || return $?
+        fi
+    fi
+}
 
 [[ -f .deploy.env ]] && . ./.deploy.env
 
@@ -69,12 +74,12 @@ fi
 
 set -e
 
+do_yarn
+
 echo $'\x1b[1mLinting...\x1b[m'
-./lint.sh "${lint_flags[@]}" -l
+./lint.sh "${lint_flags[@]}"
 
 echo $'\x1b[1mBuilding...\x1b[m'
-
-yarn "${yarn_flags[@]}"
 
 if [[ -n "$lib" ]]; then
     echo $'\x1b[1m -> Building library...\x1b[m'
@@ -85,7 +90,7 @@ if [[ -n "$lib" ]]; then
             set -e
             cd $example
             echo $'\x1b[1m -> Building example '"'$example'"$'...\x1b[m'
-            yarn "${yarn_flags[@]}"
+            do_yarn
             ng build --prod
         )
     done

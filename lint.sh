@@ -10,19 +10,24 @@ Flags:
   -h    Display this message and quit
   -l    Only lint angular-pane-manager
   -u    Same as -h
+  -V    Skip checking for npm version mismatches
 EOF
 }
 
 lib=''
+mismatch='1'
 
-while getopts "hlu" opt; do
+while getopts "hluV" opt; do
     case $opt in
         h|u)
             usage
             exit 0
             ;;
         l)
-            lib=1
+            lib='1'
+            ;;
+        V)
+            mismatch=''
             ;;
         \?)
             usage
@@ -54,18 +59,20 @@ if [[ -z "$lib" ]]; then
     tslint --project tsconfig.spec.json
 fi
 
-package_ver=$(jq '.version' projects/angular-pane-manager/package.json -r)
+if [[ -n "$mismatch" ]]; then
+    package_ver=$(jq '.version' projects/angular-pane-manager/package.json -r)
 
-for example in projects/angular-pane-manager/examples/*; do
-    (
-        set -e
-        cd $example
+    for example in projects/angular-pane-manager/examples/*; do
+        (
+            set -e
+            cd $example
 
-        jq '..|objects|."@openopus/angular-pane-manager"|select(length>0)' package.json -r | while read ver; do
-            if [[ "($ver)" != "(=$package_ver)" ]]; then
-                echo $'\e[1;38;5;1m'" !> Version mismatch for example '$example' ($ver vs $package_ver)"$'\x1b[m'
-                exit -1
-            fi
-        done
-    )
-done
+            jq '..|objects|."@openopus/angular-pane-manager"|select(length>0)' package.json -r | while read ver; do
+                if [[ "($ver)" != "(=$package_ver)" ]]; then
+                    echo $'\e[1;38;5;1m'" !> Version mismatch for example '$example' ($ver vs $package_ver)"$'\x1b[m'
+                    exit -1
+                fi
+            done
+        )
+    done
+fi
