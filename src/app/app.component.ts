@@ -66,8 +66,6 @@ interface EditorTemplate {
 /** Template for extra leaf data */
 type ExtraTemplate = MotdTemplate|EditorTemplate|undefined;
 
-// TODO: save the layout when the panes are resized
-
 /** Root component of the app */
 @Component({
     selector: 'app-root',
@@ -86,7 +84,6 @@ export class AppComponent implements AfterViewInit {
     /** A map of the named MoTDs */
     private readonly motds: Map<string, TemplateRef<any>> = new Map();
 
-    // TODO: add a tagged template for making writing layouts easier?
     /** Layout of the main pane manager */
     private _paneLayout: RootLayout<Extra> = new RootLayout(undefined);
     /** Event for when the child templates are ready */

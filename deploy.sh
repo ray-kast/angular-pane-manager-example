@@ -127,7 +127,7 @@ if [[ -z "$noop" ]]; then
             cd dist/angular-pane-manager
 
             yarn login
-            openssl aes-256-cbc -d -k "$pass" -iter 10000 -in .npm-password.enc | \
+            openssl aes-256-cbc -d -k "$pass" -iter 10000 -in ../../.npm-password.enc | \
                 yarn publish --access=public --new-version "$(jq '.version' package.json -r)"
         )
     fi
