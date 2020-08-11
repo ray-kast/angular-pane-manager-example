@@ -11,6 +11,7 @@ Flags:
   -h    Display this message and quit
   -l    Only lint and build angular-pane-manager
   -n    Perform a dry-run, building but skipping the deploy step
+  -N    Perform a dry-run but allow lockfiles to be updated
   -u    Same as -h
 EOF
 }
@@ -19,7 +20,7 @@ noop=''
 lib=''
 app='1'
 
-while getopts "ahlnu" opt; do
+while getopts "ahlnNu" opt; do
     case $opt in
         a)
             lib='1'
@@ -34,7 +35,10 @@ while getopts "ahlnu" opt; do
             app=''
             ;;
         n)
-            noop=1
+            noop='1'
+            ;;
+        N)
+            noop='lock'
             ;;
         \?)
             usage
@@ -55,7 +59,7 @@ lint_flags=()
 [[ -n "$lib" && -z "$noop" ]] && lint_flags+=('-V')
 
 function do_yarn() {
-    if [[ -n "$noop" ]]; then
+    if [[ "$noop" != 'lock' ]]; then
         yarn install -A --frozen-lockfile || return $?
     else
         if ! yarn upgrade -A; then

@@ -33,6 +33,7 @@ export class EditorComponent implements OnDestroy {
     /** The options to pass to Monaco */
     public readonly opts: unknown = {
         theme: 'vs-dark',
+        // theme: 'vs',
         language: 'javascript',
     };
 
