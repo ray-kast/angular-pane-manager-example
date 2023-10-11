@@ -1,25 +1,23 @@
-import {async, TestBed} from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
-import {AppComponent} from './app.component';
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
-        void TestBed
-            .configureTestingModule({
-                declarations: [AppComponent],
-            })
-            .compileComponents();
+        void TestBed.configureTestingModule({
+            declarations: [AppComponent],
+        }).compileComponents();
     }));
 
     it('should create the app', () => {
         const fixture = TestBed.createComponent(AppComponent);
-        const app     = fixture.debugElement.componentInstance;
+        const app = fixture.debugElement.componentInstance;
         void expect(app).toBeTruthy();
     });
 
-    it(`should have as title 'angular-pane-manager-example'`, () => {
+    it("should have as title 'angular-pane-manager-example'", () => {
         const fixture = TestBed.createComponent(AppComponent);
-        const app     = fixture.debugElement.componentInstance;
+        const app = fixture.debugElement.componentInstance;
         void expect(app.title).toEqual('angular-pane-manager-example');
     });
 
@@ -27,7 +25,8 @@ describe('AppComponent', () => {
         const fixture = TestBed.createComponent(AppComponent);
         fixture.detectChanges();
         const compiled = fixture.debugElement.nativeElement;
-        void expect(compiled.querySelector('h1').textContent)
-            .toContain('Welcome to angular-pane-manager-example!');
+        void expect(compiled.querySelector('h1').textContent).toContain(
+            'Welcome to angular-pane-manager-example!',
+        );
     });
 });

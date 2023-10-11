@@ -1,7 +1,7 @@
 // tslint:disable no-implicit-dependencies
-import {Component, Input, Output, TemplateRef} from '@angular/core';
-import {PaneHeaderMode, PaneHeaderStyle} from 'projects/angular-pane-manager/src/public-api';
-import {BehaviorSubject, Observable} from 'rxjs';
+import { Component, Input, Output, TemplateRef } from '@angular/core';
+import { PaneHeaderMode, PaneHeaderStyle } from 'projects/angular-pane-manager/src/public-api';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
  * Represents a message - just for you!
@@ -18,13 +18,13 @@ export class MotdComponent {
     /** See header */
     private readonly $header: BehaviorSubject<PaneHeaderStyle> = new BehaviorSubject({
         headerMode: PaneHeaderMode.Visible as PaneHeaderMode,
-        title: this.$title                 as Observable<string>,
-        icon: new BehaviorSubject<string|undefined>(undefined) as Observable<string|undefined>,
+        title: this.$title as Observable<string>,
+        icon: new BehaviorSubject<string | undefined>(undefined) as Observable<string | undefined>,
         closable: true as boolean,
     });
 
     /** The template to render */
-    @Input() public motd: TemplateRef<any>|undefined;
+    @Input() public motd: TemplateRef<any> | undefined;
 
     /** The header for the pane */
     @Output()
@@ -38,5 +38,7 @@ export class MotdComponent {
         return this.$title.value;
     }
 
-    public set title(val: string) { this.$title.next(val); }
+    public set title(val: string) {
+        this.$title.next(val);
+    }
 }

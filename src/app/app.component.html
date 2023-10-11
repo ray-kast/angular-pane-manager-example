@@ -1,21 +1,47 @@
-<ng-pane-manager id="man" class="ng-theme-default" [(layout)]="paneLayout"
-    (layoutUpdate)="requestAutosave.next(undefined)"></ng-pane-manager>
+<ng-pane-manager
+    id="man"
+    class="ng-theme-default"
+    [(layout)]="paneLayout"
+    (layoutUpdate)="requestAutosave.next(undefined)"
+></ng-pane-manager>
 
-<app-motd *ngPaneTemplate="let pane named 'motd'; let extra = extra" [motd]="extra.motd" [title]="extra.title"
-    (header)="pane.header = $event"></app-motd>
+<app-motd
+    *ngPaneTemplate="let pane; named: 'motd'; let extra = extra"
+    [motd]="extra.motd"
+    [title]="extra.title"
+    (header)="pane.header = $event"
+></app-motd>
 
-<app-editor *ngPaneTemplate="let pane named 'editor'; let extra = extra" (header)="pane.header = $event"
-    [title]="extra.title" [(code)]="extra.code" (codeChange)="requestAutosave.next(undefined)"
-    [onResize]="pane.onResize"></app-editor>
+<app-editor
+    *ngPaneTemplate="let pane; named: 'editor'; let extra = extra"
+    (header)="pane.header = $event"
+    [title]="extra.title"
+    [(code)]="extra.code"
+    (codeChange)="requestAutosave.next(undefined)"
+    [onResize]="pane.onResize"
+></app-editor>
 
-<div *ngPaneTemplate="let panel named 'top' withHeader header('hidden', 'Toolbar', 'assets/icon.png', false);
-    let extra = extra" class="pane-content">
+<div
+    *ngPaneTemplate="
+        let panel;
+        named: 'top';
+        withHeader: header('hidden', 'Toolbar', 'assets/icon.png', false);
+        let extra = extra
+    "
+    class="pane-content"
+>
     <p>
-        This is a demo of <a href="https://github.com/openopus/ng-pane-manager2" target="_blank"
-            rel="noopener noreferrer">angular-pane-manager</a>! Drag any tab or header to move a pane.
+        This is a demo of
+        <a
+            href="https://github.com/openopus/ng-pane-manager2"
+            target="_blank"
+            rel="noopener noreferrer"
+            >angular-pane-manager</a
+        >! Drag any tab or header to move a pane.
     </p>
     <p>
-        Feel free to refresh the page &mdash; the grid layout will be saved and restored, just for you!
+        Feel free to refresh the page &mdash; the grid layout will be saved and restored, just for
+        you!
     </p>
     <button (click)="resetLayout()">Reset Layout</button>
     <button (click)="addEditor()">New Editor</button>
@@ -23,29 +49,47 @@
 
 <ng-template #main1Motd>
     <div style="background: #3b434b">
-    <!-- <div style="background: #ece0c8"> -->
+        <!-- <div style="background: #ece0c8"> -->
         <em>Eat your ｖｅｇｅｔａｌ</em>
     </div>
 </ng-template>
 
 <ng-template #main2Motd>
     <div style="background: #2e3236">
-    <!-- <div style="background: #d3cec4"> -->
+        <!-- <div style="background: #d3cec4"> -->
         <strong>Consume ｄｒｉｎｃｃ</strong>
     </div>
 </ng-template>
 
-<div *ngPaneTemplate="let panel named 'sideLeft' withHeader header('visible', 'Left', 'assets/icon.png', true)"
-    class="pane-content">
+<div
+    *ngPaneTemplate="
+        let panel;
+        named: 'sideLeft';
+        withHeader: header('visible', 'Left', 'assets/icon.png', true)
+    "
+    class="pane-content"
+>
     Left sidebar
 </div>
 
-<div *ngPaneTemplate="let panel named 'sideRight' withHeader header('visible', 'Right', 'assets/icon.png', true)"
-    class="pane-content">
+<div
+    *ngPaneTemplate="
+        let panel;
+        named: 'sideRight';
+        withHeader: header('visible', 'Right', 'assets/icon.png', true)
+    "
+    class="pane-content"
+>
     Right sidebar
 </div>
 
-<div *ngPaneTemplate="let panel named 'footer' withHeader header('hidden', 'Footer', 'assets/icon.png', false)"
-    class="pane-content">
+<div
+    *ngPaneTemplate="
+        let panel;
+        named: 'footer';
+        withHeader: header('hidden', 'Footer', 'assets/icon.png', false)
+    "
+    class="pane-content"
+>
     Footer
 </div>

@@ -1,43 +1,34 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    // Structure
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "moduleResolution": "node",
-    // Versioning & Types
-    "module": "esnext",
-    "target": "es2015",
-    "lib": [
-      "dom",
-      "es2018"
-    ],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "paths": {
-      "angular-pane-manager": [
-        "dist/angular-pane-manager"
-      ],
-      "angular-pane-manager/*": [
-        "dist/angular-pane-manager/*"
-      ]
+    "compileOnSave": false,
+    "compilerOptions": {
+        // Structure
+        "baseUrl": "./",
+        "outDir": "./dist/out-tsc",
+        "moduleResolution": "node",
+        // Versioning & Types
+        "module": "esnext",
+        "target": "es2015",
+        "lib": ["dom", "es2018"],
+        "typeRoots": ["node_modules/@types"],
+        "paths": {
+            "angular-pane-manager": ["dist/angular-pane-manager"],
+            "angular-pane-manager/*": ["dist/angular-pane-manager/*"]
+        },
+        // Options
+        "declaration": false,
+        "downlevelIteration": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "sourceMap": true,
+        // Diagnostics
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strict": true
     },
-    // Options
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "sourceMap": true,
-    // Diagnostics
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strict": true
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+    "angularCompilerOptions": {
+        "fullTemplateTypeCheck": true,
+        "strictInjectionParameters": true
+    }
 }

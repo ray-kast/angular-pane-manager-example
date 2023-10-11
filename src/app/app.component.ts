@@ -1,6 +1,6 @@
 // tslint:disable no-implicit-dependencies no-magic-numbers
-import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
-import {StorageMap} from '@ngx-pwa/local-storage';
+import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import {
     headerStyle,
     LayoutBuilder,
@@ -11,8 +11,8 @@ import {
     saveLayout,
     StringHeaderMode,
 } from 'projects/angular-pane-manager/src/public-api';
-import {forkJoin, Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import { forkJoin, Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 /** Enum for differentiating extra data types */
 const enum ExtraType {
@@ -41,7 +41,7 @@ interface Editor {
 }
 
 /** Extra data for every leaf */
-type Extra = Motd|Editor|undefined;
+type Extra = Motd | Editor | undefined;
 
 /** Template for an important message */
 interface MotdTemplate {
@@ -64,7 +64,7 @@ interface EditorTemplate {
 }
 
 /** Template for extra leaf data */
-type ExtraTemplate = MotdTemplate|EditorTemplate|undefined;
+type ExtraTemplate = MotdTemplate | EditorTemplate | undefined;
 
 /** Root component of the app */
 @Component({
@@ -94,11 +94,15 @@ export class AppComponent implements AfterViewInit {
     public readonly requestAutosave: Subject<undefined> = new Subject();
 
     /** Pass the pane layout to the pane manager */
-    public get paneLayout(): RootLayout<Extra> { return this._paneLayout; }
+    public get paneLayout(): RootLayout<Extra> {
+        return this._paneLayout;
+    }
 
     /** Save the layout if the pane manager changes it */
     public set paneLayout(val: RootLayout<Extra>) {
-        if (Object.is(this._paneLayout, val)) { return; }
+        if (Object.is(this._paneLayout, val)) {
+            return;
+        }
 
         this._paneLayout = val;
         this.saveLayout();
@@ -106,14 +110,21 @@ export class AppComponent implements AfterViewInit {
 
     /** Construct a new app instance */
     public constructor(private readonly storage: StorageMap) {
-        forkJoin([this.storage.get(AppComponent.LAYOUT_KEY), this.viewReady])
-            .subscribe(([template, _]) => {
+        forkJoin([this.storage.get(AppComponent.LAYOUT_KEY), this.viewReady]).subscribe(
+            ([template, _]) => {
                 const result = LayoutBuilder.empty<Extra>().build(b => {
-                    b.set(b.load(template as LayoutTemplate<ExtraTemplate>,
-                                 this.loadExtra.bind(this)));
+                    b.set(
+                        b.load(
+                            template as LayoutTemplate<ExtraTemplate>,
+                            this.loadExtra.bind(this),
+                        ),
+                    );
 
-                    if (b.root.findChild(c => c.type === LayoutType.Leaf &&
-                                              c.template === 'top') === undefined) {
+                    if (
+                        b.root.findChild(
+                            c => c.type === LayoutType.Leaf && c.template === 'top',
+                        ) === undefined
+                    ) {
                         b.add(b.leaf('top', 'top', undefined, 'header'));
                     }
                 });
@@ -121,19 +132,23 @@ export class AppComponent implements AfterViewInit {
                 if (result.err !== undefined) {
                     console.warn('Error loading layout: ', result.err);
                     this.resetLayout();
-                }
-                else {
+                } else {
                     this._paneLayout = result.ok;
                 }
 
-                while (this.paneLayout.findChild(c => c.type === LayoutType.Leaf &&
-                                                      c.id === `editor${this.nextEditor}`) !==
-                       undefined) {
+                while (
+                    this.paneLayout.findChild(
+                        c => c.type === LayoutType.Leaf && c.id === `editor${this.nextEditor}`,
+                    ) !== undefined
+                ) {
                     this.nextEditor += 1;
                 }
-            });
+            },
+        );
 
-        this.requestAutosave.pipe(debounceTime(500)).subscribe(_ => { this.saveLayout(); });
+        this.requestAutosave.pipe(debounceTime(500)).subscribe(_ => {
+            this.saveLayout();
+        });
     }
 
     /** Save the current layout and config */
@@ -145,63 +160,71 @@ export class AppComponent implements AfterViewInit {
 
     /** Serialize the extra data into a JSON-safe format */
     private saveExtra(extra: Extra): ExtraTemplate {
-        if (extra === undefined) { return undefined; }
+        if (extra === undefined) {
+            return undefined;
+        }
 
         switch (extra.type) {
-        case ExtraType.Motd: {
-            let motd;
+            case ExtraType.Motd: {
+                let motd;
 
-            for (const [name, template] of this.motds) {
-                if (Object.is(extra.motd, template)) {
-                    motd = name;
-                    break;
+                for (const [name, template] of this.motds) {
+                    if (Object.is(extra.motd, template)) {
+                        motd = name;
+                        break;
+                    }
                 }
+
+                if (motd === undefined) {
+                    throw new Error("bad MoTD ID - this shouldn't happen");
+                }
+
+                const { title } = extra;
+
+                return { type: 'motd', motd, title };
             }
+            case ExtraType.Editor: {
+                const { title, code } = extra;
 
-            if (motd === undefined) { throw new Error('bad MoTD ID - this shouldn\'t happen'); }
-
-            const {title} = extra;
-
-            return {type: 'motd', motd, title};
-        }
-        case ExtraType.Editor: {
-            const {title, code} = extra;
-
-            return {type: 'editor', title, code};
-        }
+                return { type: 'editor', title, code };
+            }
         }
     }
 
     /** Load the templates back into the serialized extra data */
     private loadExtra(extra: ExtraTemplate): Extra {
-        if (extra === undefined) { return undefined; }
+        if (extra === undefined) {
+            return undefined;
+        }
 
         switch (extra.type) {
-        case 'motd': {
-            const motd = this.motds.get(extra.motd);
+            case 'motd': {
+                const motd = this.motds.get(extra.motd);
 
-            if (motd === undefined) { throw new Error('bad MoTD ID - this shouldn\'t happen'); }
+                if (motd === undefined) {
+                    throw new Error("bad MoTD ID - this shouldn't happen");
+                }
 
-            const {title} = extra;
+                const { title } = extra;
 
-            return {type: ExtraType.Motd, motd, title};
-        }
-        case 'editor': {
-            const {title, code} = extra;
+                return { type: ExtraType.Motd, motd, title };
+            }
+            case 'editor': {
+                const { title, code } = extra;
 
-            return {type: ExtraType.Editor, title, code};
-        }
+                return { type: ExtraType.Editor, title, code };
+            }
         }
     }
 
     /** Helper function for making MoTD extra data */
     private motd(motd: TemplateRef<any>, title: string): Extra {
-        return {type: ExtraType.Motd, motd, title};
+        return { type: ExtraType.Motd, motd, title };
     }
 
     /** Helper function for making editor extra data */
     private editor(title: string, code: string): Extra {
-        return {type: ExtraType.Editor, title, code};
+        return { type: ExtraType.Editor, title, code };
     }
 
     /** Set up the layout once the templates are ready */
@@ -214,8 +237,12 @@ export class AppComponent implements AfterViewInit {
     }
 
     /** Add headerStyle to the template context */
-    public header(mode: StringHeaderMode, title: string, icon: string|undefined, closable: boolean):
-        PaneHeaderStyle {
+    public header(
+        mode: StringHeaderMode,
+        title: string,
+        icon: string | undefined,
+        closable: boolean,
+    ): PaneHeaderStyle {
         return headerStyle(mode, title, icon, closable);
     }
 
@@ -234,7 +261,8 @@ export class AppComponent implements AfterViewInit {
                         b.leaf('motd2', 'motd', this.motd(this.main2Motd, 'Message the 2th')),
                     ],
                     undefined,
-                    'bottom'),
+                    'bottom',
+                ),
                 b.leaf('footer', 'footer', undefined, 'footer'),
             );
         });
@@ -252,8 +280,11 @@ export class AppComponent implements AfterViewInit {
 
         this.paneLayout = result.unwrap();
 
-        while (this.paneLayout.findChild(c => c.type === LayoutType.Leaf &&
-                                              c.id === `editor${this.nextEditor}`) !== undefined) {
+        while (
+            this.paneLayout.findChild(
+                c => c.type === LayoutType.Leaf && c.id === `editor${this.nextEditor}`,
+            ) !== undefined
+        ) {
             this.nextEditor += 1;
         }
     }

@@ -64,15 +64,15 @@ if [[ -n "$mismatch" ]]; then
 fi
 
 echo $' -> projects/angular-pane-manager (lib)'
-tslint --project projects/angular-pane-manager/tsconfig.lib.json
+yarn tslint --project projects/angular-pane-manager/tsconfig.lib.json
 
 echo $' -> projects/angular-pane-manager (spec)'
-tslint --project projects/angular-pane-manager/tsconfig.spec.json
+yarn tslint --project projects/angular-pane-manager/tsconfig.spec.json
 
 if [[ -z "$lib" ]]; then
     echo $' -> angular-pane-manager-example (app)'
-    tslint --project tsconfig.app.json
+    yarn tslint --project tsconfig.app.json
 
     echo $' -> angular-pane-manager-example (spec)'
-    tslint --project tsconfig.spec.json
+    yarn tslint --project tsconfig.spec.json
 fi
