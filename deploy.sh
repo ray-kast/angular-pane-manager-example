@@ -94,14 +94,14 @@ echo $'\x1b[1mTesting...\x1b[m'
 
 if [[ -n "$lib" || -z "$noop" ]]; then
     echo $'\x1b[1m -> Testing library...\x1b[m'
-    ng test angular-pane-manager --browsers=FirefoxDeveloper --watch=false
+    yarn ng test angular-pane-manager --browsers=FirefoxDeveloper --watch=false
 fi
 
 echo $'\x1b[1mBuilding...\x1b[m'
 
 if [[ -n "$lib" ]]; then
     echo $'\x1b[1m -> Building library...\x1b[m'
-    ng build --prod angular-pane-manager
+    yarn ng build --prod angular-pane-manager
 
     for example in projects/angular-pane-manager/examples/*; do
         (
@@ -109,14 +109,14 @@ if [[ -n "$lib" ]]; then
             cd $example
             echo $'\x1b[1m -> Building example '"'$example'"$'...\x1b[m'
             do_yarn
-            ng build --prod
+            yarn ng build --prod
         )
     done
 fi
 
 if [[ -n "$app" ]]; then
     echo $'\x1b[1m -> Building app...\x1b[m'
-    ng build --prod
+    yarn ng build --prod
     mv dist/angular-pane-manager-example/index{.prod,}.html
 fi
 
@@ -139,4 +139,6 @@ if [[ -z "$noop" ]]; then
     if [[ -n "$app" ]]; then
         rsync -rcp --progress --delete dist/angular-pane-manager-example/ "$ADDRESS"
     fi
+elif [[ -n "$app" ]]; then
+    rsync -rcp --progress --delete -n dist/angular-pane-manager-example/ "$ADDRESS"
 fi

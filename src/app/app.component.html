@@ -5,6 +5,12 @@
     (layoutUpdate)="requestAutosave.next(undefined)"
 ></ng-pane-manager>
 
+<span *ngPaneWidget="let widget; named: 'editor'; withControls: testControls; let layout = layout">
+    {{ layout.extra?.title }}
+</span>
+
+<ng-template #testControls><span style="opacity: 0.5">editor</span></ng-template>
+
 <app-motd
     *ngPaneTemplate="let pane; named: 'motd'; let extra = extra"
     [motd]="extra.motd"

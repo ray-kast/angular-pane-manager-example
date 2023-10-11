@@ -1,6 +1,10 @@
 // tslint:disable no-implicit-dependencies
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { PaneHeaderMode, PaneHeaderStyle } from 'projects/angular-pane-manager/src/public-api';
+import {
+    customHeaderStyle,
+    PaneHeaderMode,
+    PaneHeaderStyle,
+} from 'projects/angular-pane-manager/src/public-api';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { switchAll } from 'rxjs/operators';
 
@@ -17,12 +21,9 @@ export class EditorComponent implements OnDestroy {
     /** See title */
     private readonly $title: BehaviorSubject<string> = new BehaviorSubject('');
     /** See header */
-    private readonly $header: BehaviorSubject<PaneHeaderStyle> = new BehaviorSubject({
-        headerMode: PaneHeaderMode.AlwaysTab as PaneHeaderMode,
-        title: this.$title as Observable<string>,
-        icon: new BehaviorSubject<string | undefined>(undefined) as Observable<string | undefined>,
-        closable: true as boolean,
-    });
+    private readonly $header: BehaviorSubject<PaneHeaderStyle> = new BehaviorSubject(
+        customHeaderStyle(PaneHeaderMode.AlwaysTab, 'editor', true),
+    );
 
     /** See code */
     private _code!: string;

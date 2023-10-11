@@ -2,6 +2,7 @@
 import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import {
+    customHeaderStyle,
     headerStyle,
     LayoutBuilder,
     LayoutTemplate,
@@ -244,6 +245,11 @@ export class AppComponent implements AfterViewInit {
         closable: boolean,
     ): PaneHeaderStyle {
         return headerStyle(mode, title, icon, closable);
+    }
+
+    /** Add headerStyle for a custom header to the template context */
+    public widgets(mode: StringHeaderMode, widgets: string, closable: boolean): PaneHeaderStyle {
+        return customHeaderStyle(mode, widgets, closable);
     }
 
     /** Reset the layout */
