@@ -28,8 +28,8 @@
                             "src/assets",
                             {
                                 "glob": "**/*",
-                                "input": "node_modules/ngx-monaco-editor/assets/monaco",
-                                "output": "./assets/monaco/"
+                                "input": "node_modules/monaco-editor/min",
+                                "output": "./assets/monaco-editor/min"
                             }
                         ],
                         "styles": [
@@ -163,5 +163,8 @@
             }
         }
     },
-    "defaultProject": "angular-pane-manager-example"
+    "defaultProject": "angular-pane-manager-example",
+    "cli": {
+      "analytics": false
+    }
 }
